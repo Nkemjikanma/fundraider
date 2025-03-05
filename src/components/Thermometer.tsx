@@ -7,18 +7,16 @@ interface ThermometerProps {
 	progress: number;
 	goal: number;
 	balance: number;
-	loading: boolean;
 }
 
 export function Thermometer({
+  progress,
 	goal,
 	balance,
-	loading = false,
 	progress: externalProgress,
 }: ThermometerProps) {
 	const [time, setTime] = useState(0);
 	const requestRef = useRef<number>(0);
-	const [progress, setProgress] = useState(externalProgress || 0); // Default to 50% if not provided
 
 	// Animation loop for flowing effect
 	useEffect(() => {
@@ -30,13 +28,6 @@ export function Thermometer({
 		requestRef.current = requestAnimationFrame(animate);
 		return () => cancelAnimationFrame(requestRef.current);
 	}, []);
-
-	// Update progress when external progress changes
-	useEffect(() => {
-		if (externalProgress !== undefined) {
-			setProgress(externalProgress);
-		}
-	}, [externalProgress]);
 
 	// Calculate mercury height based on progress
 	const mercuryHeight = Math.max(0, Math.min(220, (220 * progress) / 100));
@@ -86,33 +77,37 @@ export function Thermometer({
 	}));
 
 	return (
-		<div className="relative flex flex-col items-center">
+		<div className="relative flex flex-col justify-start h-fit">
 			<motion.div
 				initial={{ opacity: 0, scale: 0.9 }}
 				animate={{ opacity: 1, scale: 1 }}
 				transition={{ duration: 0.5 }}
-				className="relative"
+				className="relative h-fit flex items-center"
 			>
 				<svg
-					width="80"
+					width="100"
 					height="300"
-					viewBox="0 0 80 300"
+					viewBox="0 30 80 280"
 					style={{
 						imageRendering: "pixelated",
 					}}
-					aria-label="Thermometer"
+					aria-label="Fundraider Thermometer"
+		   aria-labelledby="Fundraider Thermometer"
+                role="img"
 				>
 					<defs>
 						<linearGradient id="mercuryGradientTube" x1="0%" y1="0%" x2="0%" y2="100%">
-							<stop offset="0%" stopColor="#FF5E5B" />
-							<stop offset="25%" stopColor="#FF9E5B" />
+						<stop offset="75%" stopColor="#8AFF5B" />
+						<stop offset="100%" stopColor="#5BD3FF" />
 							<stop offset="50%" stopColor="#FFDB5B" />
 							<stop offset="75%" stopColor="#8AFF5B" />
 						</linearGradient>
 
 						<linearGradient id="mercuryGradientBulb" x1="0%" y1="0%" x2="0%" y2="100%">
-							<stop offset="75%" stopColor="#8AFF5B" />
-							<stop offset="100%" stopColor="#5BD3FF" />
+
+							<stop offset="25%" stopColor="#FF9E5B" />
+
+							<stop offset="0%" stopColor="#FF5E5B" />
 						</linearGradient>
 
 						<clipPath id="tubePath">
@@ -121,7 +116,7 @@ export function Thermometer({
 					</defs>
 
 					{/* Background */}
-					<rect x="0" y="0" width="80" height="300" fill="transparent" />
+					<rect x="0" y="0" width="100" height="300" fill="transparent" />
 
 					{/* Thermometer tube background */}
 					<rect
@@ -178,39 +173,33 @@ export function Thermometer({
 				{/* Current value indicator */}
 				{progress > 0 && (
 					<motion.div
-						className="absolute right-0 w-3 h-3 bg-green-500"
+						className="absolute right-0 flex items-center gap-1 bg-green-500"
 						style={{
 							top: `${Math.min(
 								Math.max(
-									260 - mercuryHeight, // Position aligned with mercury level
-									20,
+									220 - mercuryHeight, // Position aligned with mercury level
+									5,
 								),
 								370,
 							)}px`,
-							clipPath: "polygon(0% 50%, 100% 0%, 100% 100%)", // Reversed triangle pointing left
+							clipPath: "polygon(0% 50%, 100% 0%, 100% 100%)",
 						}}
 						initial={{ x: -10, opacity: 0 }}
 						animate={{ x: 0, opacity: 1 }}
 						transition={{ delay: 0.5 }}
-					/>
+					>
+						<span className="text-sm font-medium bg-teal-500 text-white px-2 py-2 rounded"/>
+					</motion.div>
 				)}
 			</motion.div>
 
-			<button
-				onClick={() => {
-					setProgress((prev) => Math.min(prev + 10, 100));
-				}}
-				type="button"
-				className="mt-4 px-3 py-1 bg-green-600 text-white rounded text-sm"
-			>
-				Increase
-			</button>
 
-			{loading && (
+
+			{/* {loading && (
 				<div className="absolute inset-0 flex items-center justify-center bg-white/50">
 					<div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
 				</div>
-			)}
+			)} */}
 		</div>
 	);
 }
