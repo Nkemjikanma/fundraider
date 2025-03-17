@@ -12,5 +12,6 @@ export function useTransactions(address: string) {
     },
     staleTime: 30000, // Consider data fresh for 30 seconds
     refetchInterval: 60000, // Refetch every minute
+    retry: 3,
   });
 }

@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 
 interface TransactionFlowProps {
   amount: string;
+  token: string;
   recipient: string;
   onConfirm: () => Promise<void>;
   onClose: () => void;
@@ -11,6 +12,7 @@ interface TransactionFlowProps {
 
 export const TransactionFlow = ({
   amount,
+  token,
   recipient,
   onConfirm,
   onClose,
@@ -37,7 +39,7 @@ export const TransactionFlow = ({
   };
 
   return (
-    <div className="relative p-4 border rounded-lg mt-2">
+    <div className="relative p-4 border rounded-none mt-2">
       {onClose && (
         <Button
           variant="ghost"
@@ -52,14 +54,16 @@ export const TransactionFlow = ({
         <div>
           <h3 className="font-bold">Confirm Transaction</h3>
           <div className="mt-2">
-            <p>Amount: {amount} ETH</p>
+            <p>
+              Amount: {amount} {token}
+            </p>
             <p>To: {recipient}</p>
             {/* Add estimated gas fees here */}
           </div>
           <Button
             type="button"
             onClick={handleConfirm}
-            className="bg-teal-500 hover:bg-teal-600"
+            className="bg-teal-500 hover:bg-teal-600 rounded-none mt-2"
           >
             Confirm
           </Button>

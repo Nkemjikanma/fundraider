@@ -1,30 +1,40 @@
 "use client";
 import { DonationFeed } from "@/components/DonationFeed";
 import { Thermometer } from "@/components/Thermometer";
+import { config } from "@/components/providers/Wagmi";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TOKENS } from "@/lib/constants";
 import { useBalance } from "@/lib/hooks/useBalance";
 import { useTransactions } from "@/lib/hooks/useTransactions";
-import { useValidTokens } from "@/lib/hooks/useValidTokens";
-import { fundraisers, getFundRaiderValidTokens } from "@/lib/utils";
+import type { Token } from "@/lib/types";
+// import { useValidTokens } from "@/lib/hooks/useValidTokens";
+import { fundraisers } from "@/lib/utils";
 import sdk from "@farcaster/frame-sdk";
-import { Clock, ExternalLink, Share2, WalletIcon } from "lucide-react";
+import { fetchBalance, getBalance } from "@wagmi/core";
+import { Clock, ExternalLink, EyeOff, Share2, WalletIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { formatEther } from "viem";
+import { formatEther, formatUnits } from "viem";
 import { parseEther } from "viem";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
 import {
   UsePrepareTransactionRequestParameters,
   useSendTransaction,
 } from "wagmi";
+import { base } from "wagmi/chains";
 import { Logo } from "./Logo";
 import { TransactionFlow } from "./TransactionFlow";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import {
@@ -42,9 +52,10 @@ export default function FundRaider({ param }: { param: string }) {
   const fundraiser = fundraisers[0];
 
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showQuickDonateError, setShowQuickDonateError] = useState(false);
   const [showTransactionFlow, setShowTransactionFlow] = useState(false);
   const [customAmount, setCustomAmount] = useState<string>("");
-  const [selectedToken, setSelectedToken] = useState("ETH");
+  const [selectedToken, setSelectedToken] = useState<Token>(TOKENS[0]);
   const [maxAmount, setMaxAmount] = useState<string>("");
   const { address: userAddress, isConnected } = useAccount();
 
@@ -60,13 +71,13 @@ export default function FundRaider({ param }: { param: string }) {
     error: transactionsError,
   } = useTransactions(fundraiser.fundraiserAddress.address);
 
-  const { data: validTokens, isLoading: isLoadingTokens } =
-    useValidTokens(userAddress);
+  // const { data: validTokens, isLoading: isLoadingTokens } =
+  //   useValidTokens(userAddress);
 
-  const displayedValiedTokens =
-    validTokens?.length === 0 ? [TOKENS[0]] : validTokens;
+  // const displayedValiedTokens =
+  //   validTokens?.length === 0 ? [TOKENS[0]] : validTokens;
 
-  console.log("token validest", displayedValiedTokens);
+  // console.log("token validest", displayedValiedTokens);
 
   const isLoading = !isLoaded || isBalanceLoading || isTransactionsLoading;
 
@@ -110,45 +121,81 @@ export default function FundRaider({ param }: { param: string }) {
   }, []);
 
   const handleQuickDonateButtons = useCallback(
-    (amount: number) => {
-      setCustomAmount(amount.toString());
-      setSelectedToken("ETH");
-      console.log(`Donating ${amount} ${selectedToken}`);
+    async (amount: number) => {
+      if (!userAddress) return;
+
+      try {
+        const ownerTokensWagmi = await getBalance(config, {
+          address: userAddress,
+          blockTag: "latest",
+          chainId: base.id,
+        });
+
+        const formattedBalance = Number(
+          formatUnits(ownerTokensWagmi.value, ownerTokensWagmi.decimals),
+        );
+
+        console.log("formattedBalance:", formattedBalance);
+
+        if (Number(formattedBalance) > Number(customAmount)) {
+          setCustomAmount(Number(amount).toFixed(4).toString());
+          setSelectedToken(TOKENS[0]);
+          setShowTransactionFlow(true);
+
+          return;
+        }
+        setShowQuickDonateError(true);
+      } catch (error) {
+        console.error("Error fetching ETH balance:", error);
+      }
     },
-    [selectedToken],
+    [customAmount, userAddress],
   );
 
-  const handleDonateClick = () => {
+  const handleDonateClick = async () => {
     if (!customAmount || !isConnected) return;
+
     setShowTransactionFlow(true);
   };
 
   const handleMaxClick = async () => {
     if (!userAddress) return;
     try {
-      if (selectedToken === "ETH") {
-        // For ETH, use the native balance
-        const response = await fetch(
-          `/api/token-balance?address=${userAddress}&token=${selectedToken}`,
-        );
-        const data = await response.json();
+      let balance;
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch balance");
-        }
-
-        const formattedBalance = data.balance;
-
-        console.log("formattedBalance", formattedBalance);
-        // Leave some ETH for gas
-        const maxAmount =
-          Number(formattedBalance) > 0.01
-            ? (Number(formattedBalance) - 0.01).toString()
-            : "0";
-
-        setMaxAmount(formattedBalance);
-        setCustomAmount(maxAmount);
+      if (selectedToken.symbol === "ETH") {
+        // For ETH
+        balance = await getBalance(config, {
+          address: userAddress,
+          chainId: base.id,
+        });
+      } else {
+        // For ERC20 tokens
+        balance = await getBalance(config, {
+          address: userAddress,
+          token: selectedToken.address as `0x${string}`,
+          chainId: base.id,
+        });
       }
+
+      // const ownerTokensWagmi = await getBalance(config, {
+      //   address: userAddress,
+      //   blockTag: "latest",
+      //   token: selectedToken.address,
+      //   unit: "ether",
+      // });
+
+      const formattedBalance = formatUnits(balance.value, balance.decimals);
+      console.log("formattedBalance", formattedBalance);
+
+      // Leave some ETH for gas
+      // const maxAmount =
+      //   Number(formattedBalance) > 0
+      //     ? (Number(formattedBalance) - 0.01).toString()
+      //     : "0.0";
+
+      setMaxAmount(formattedBalance);
+      setCustomAmount(Number(formattedBalance).toFixed(4).toString());
     } catch (error) {
       console.error("Error fetching balance:", error);
     }
@@ -159,13 +206,13 @@ export default function FundRaider({ param }: { param: string }) {
       <CardContent className="p-6">
         <div className="space-y-6">
           {/* Connected Wallet Info */}
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between p-3 bg-gray-50">
             <div className="flex items-center gap-2">
               <WalletIcon className="w-5 h-5 text-gray-500" />
               <span className="text-sm font-medium">Connected Wallet</span>
             </div>
             {isConnected ? (
-              <code className="text-sm bg-white px-2 py-1 rounded">
+              <code className="text-sm bg-white px-2 py-1">
                 {userAddress?.slice(0, 6)}...{userAddress?.slice(-4)}
               </code>
             ) : (
@@ -185,12 +232,18 @@ export default function FundRaider({ param }: { param: string }) {
                   key={amount}
                   variant="outline"
                   onClick={() => handleQuickDonateButtons(amount)}
-                  className="w-full"
+                  className="w-full rounded-none"
+                  disabled={!isConnected}
                 >
                   {amount} ETH
                 </Button>
               ))}
             </div>
+            {showQuickDonateError && (
+              <p className="text-red-500 text-xs">
+                Not enough ETH in thy wallet <span className="ml-1">👎🏾</span>
+              </p>
+            )}
           </div>
 
           {/* Custom Amount Input */}
@@ -200,39 +253,34 @@ export default function FundRaider({ param }: { param: string }) {
               <div className="flex-1">
                 <div className="relative flex items-center">
                   <Select
-                    value={selectedToken}
-                    onValueChange={setSelectedToken}
+                    value={selectedToken.symbol}
+                    onValueChange={(value) =>
+                      setSelectedToken(
+                        TOKENS.find((token) => token.symbol === value) ??
+                          TOKENS[0],
+                      )
+                    }
                     defaultValue={TOKENS[0].symbol}
                   >
-                    {isLoadingTokens ? (
-                      <SelectTrigger className="w-[100px] absolute left-0 z-10">
-                        <SelectValue
-                          placeholder="Loading..."
-                          defaultValue={TOKENS[0].symbol}
-                        />
-                      </SelectTrigger>
-                    ) : (
-                      <SelectTrigger className="w-[100px] absolute left-0 z-10">
-                        <SelectValue placeholder="Token" />
-                      </SelectTrigger>
-                    )}
+                    <SelectTrigger className="w-[100px] absolute left-0 z-10 rounded-none">
+                      <SelectValue
+                        placeholder="Token"
+                        defaultValue={TOKENS[0].symbol}
+                      />
+                    </SelectTrigger>
                     <SelectContent>
-                      {displayedValiedTokens !== undefined ? (
-                        displayedValiedTokens.map((token) => (
-                          <SelectItem key={token.symbol} value={token.symbol}>
-                            <div className="flex items-center gap-2">
-                              <img
-                                src={token.image}
-                                alt={token.symbol}
-                                className="w-4 h-4"
-                              />
-                              {token.symbol}
-                            </div>
-                          </SelectItem>
-                        ))
-                      ) : (
-                        <div>No tokens available</div>
-                      )}
+                      {TOKENS.map((token) => (
+                        <SelectItem key={token.symbol} value={token.symbol}>
+                          <div className="flex items-center gap-2">
+                            <img
+                              src={token.image}
+                              alt={token.symbol}
+                              className="w-4 h-4"
+                            />
+                            {token.symbol}
+                          </div>
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <Input
@@ -241,7 +289,7 @@ export default function FundRaider({ param }: { param: string }) {
                     placeholder="0.0"
                     value={customAmount}
                     onChange={(e) => setCustomAmount(e.target.value)}
-                    className="pl-[130px]"
+                    className="pl-[130px] rounded-none"
                   />
                 </div>
               </div>
@@ -251,9 +299,9 @@ export default function FundRaider({ param }: { param: string }) {
                   !isConnected ||
                   !customAmount ||
                   isPending ||
-                  customAmount <= "0"
+                  Number(customAmount) <= 0
                 }
-                className="bg-teal-500 hover:bg-teal-600"
+                className="bg-teal-500 hover:bg-teal-600 rounded-none"
               >
                 {isConnected ? "Donate" : "Connect Wallet"}
               </Button>
@@ -270,17 +318,24 @@ export default function FundRaider({ param }: { param: string }) {
             >
               Max
             </button>
-            <span>{maxAmount}</span> {/* Replace with actual balance */}
+            <span>{Number(maxAmount).toFixed(4)}</span>{" "}
+            {/* Replace with actual balance */}
           </div>
         </div>
         {showTransactionFlow && (
           <TransactionFlow
             amount={customAmount}
-            recipient={fundraiser.fundraiserAddress.address}
+            token={selectedToken.symbol}
+            recipient={
+              fundraiser.fundraiserAddress.ensName ||
+              fundraiser.fundraiserAddress.address
+            }
             onConfirm={async () => {
               try {
-                await sendTransaction({
-                  to: fundraiser.fundraiserAddress.address,
+                sendTransaction({
+                  to:
+                    fundraiser.fundraiserAddress.ensName ||
+                    fundraiser.fundraiserAddress.address,
                   value: parseEther(customAmount),
                 });
                 setShowTransactionFlow(false); // Hide flow after successful transaction
@@ -350,81 +405,67 @@ export default function FundRaider({ param }: { param: string }) {
         height={200}
         alt="Fundraiser Logo"
       />
-      <div className="mt-8 mb-4">
-        <Badge variant="secondary" className="bg-black/80 text-white px-4 py-2">
-          🚧 Beta - Support Rosalie's Campaign
-        </Badge>
-      </div>
 
       {/* Main Fundraiser Card */}
-      <Card className="w-full relative mt-6">
-        <CardContent className="p-4">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-2xl font-bold">{fundraiser.title}</h1>
-              <p className="flex text-sm text-gray-500 w-full">
-                <Link
-                  href={`https://warpcast.com/${fundraiser.fundraiserAddress.farcaster}`}
-                  className="flex items-center gap-2"
-                >
-                  {fundraiser.fundraiserAddress.farcaster}
-                  <ExternalLink className="w-3 h-3" />
-                </Link>
-              </p>
-            </div>
-            <Button variant="ghost" size="icon">
-              <Share2 className="w-5 h-5" />
-            </Button>
-          </div>
-
-          <div className="mt-6 flex gap-1">
-            <div className="flex-1">
-              <Thermometer
-                progress={(Number(raised) / fundraiser.goal) * 100}
-                goal={fundraiser.goal}
-                balance={Number(raised)}
-              />
-            </div>
-            <div
-              className="relative flex flex-col flex-3 w-full
-              justify-between"
-            >
-              <div className="relative bg-teal-50 rounded-lg p-4">
-                <div className="text-2xl font-bold text-teal-600">
-                  {Number(raised).toFixed(4)} ETH
-                </div>
-                <div className="text-sm text-gray-600">
-                  raised of {fundraiser.goal.toFixed(4)} ETH goal
-                </div>
-
-                <div className="mt-4 flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm text-gray-500">
-                    Campaign ends in 30 days
-                  </span>
-                </div>
+      <div className="mt-6 flex justify-between px-1">
+        <div className="flex-1">
+          <Thermometer
+            progress={(Number(raised) / fundraiser.goal) * 100}
+            goal={fundraiser.goal}
+            balance={Number(raised)}
+          />
+        </div>
+        <div className="relative flex flex-col flex-2 w-full mb-6">
+          <div className="flex flex-col relative bg-teal-50 rounded-none p-3">
+            <div className="w-full flex flex-row justify-between items-start">
+              <div>
+                <h1 className="text-[16px] font-bold">{fundraiser.title}</h1>
+                <p className="flex text-sm text-gray-500 w-full">
+                  <Link
+                    href={`https://warpcast.com/${fundraiser.fundraiserAddress.farcaster}`}
+                    className="flex items-center gap-2"
+                  >
+                    {fundraiser.fundraiserAddress.farcaster}
+                    <ExternalLink className="w-3 h-3" />
+                  </Link>
+                </p>
               </div>
-              <div className="relative bg-gray-50 rounded-lg p-2 mt-3">
-                {fundraiser.goal === Number(raised) ? (
-                  <Badge
-                    variant="secondary"
-                    className="text-sm bg-green-600/80 text-white p-1"
-                  >
-                    Goal reached!
-                  </Badge>
-                ) : (
-                  <Badge
-                    variant="secondary"
-                    className="!text-sm bg-red-300 text-white p-1"
-                  >
-                    Goal not reached yet
-                  </Badge>
-                )}
+
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon">
+                  <Share2 className="w-5 h-5" />
+                </Button>
+                <Button variant="ghost" size="icon">
+                  <EyeOff className="w-5 h-5" />
+                </Button>
               </div>
             </div>
+
+            <div className="text-md font-bold text-teal-600 mt-3">
+              {Number(raised).toFixed(4)} ETH
+            </div>
+            <div className="text-sm text-gray-600">
+              raised of {fundraiser.goal.toFixed(4)} ETH goal
+            </div>
+            <div className="mt-4 flex items-center gap-2 mb-6">
+              <Clock className="w-4 h-4 text-gray-500" />
+              <span className="text-xs text-gray-500">
+                Campaign still ongoing <span className="ml-1">✅</span>
+              </span>
+            </div>
+
+            {fundraiser.goal > Number(raised) ? (
+              <div className="bg-red-50 text-red-600 py-2 px-3 rounded-none text-center text-xs font-medium border border-red-100">
+                Goal not reached yet — Help make a difference!
+              </div>
+            ) : (
+              <div className="bg-emerald-50 text-emerald-600 py-2 px-3 rounded-none text-center text-sm font-medium border border-emerald-100">
+                {`Goal reached! Thank you! ${Number(raised).toFixed(1)}% of goal reached`}
+              </div>
+            )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Donations */}
       <DonationSection />
@@ -457,7 +498,7 @@ export default function FundRaider({ param }: { param: string }) {
                   {fundraiser.fundraiserAddress.ensName ? (
                     <>
                       {" "}
-                      <code className="text-sm bg-white py-1 rounded">
+                      <code className="text-sm bg-white p-1 rounded">
                         {fundraiser.fundraiserAddress.ensName}
                       </code>
                       <Link href={fundraiser.fundraiserAddress.ensName}>
@@ -487,6 +528,12 @@ export default function FundRaider({ param }: { param: string }) {
           <DonationFeed transactions={transactions} />
         </TabsContent>
       </Tabs>
+
+      <div className="mt-8 mb-4">
+        <Badge variant="secondary" className="bg-black/80 text-white px-4 py-2">
+          🚧 Beta - Support Rosalie's Campaign
+        </Badge>
+      </div>
     </div>
   );
 }

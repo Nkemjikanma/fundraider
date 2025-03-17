@@ -4,6 +4,7 @@ import type { Token } from "./types";
 export const appURL =
   process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 export const alchemyApiKey = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY;
+export const networkURL = process.env.ALCHEMY_NETWORK_URL;
 
 export const rosaliesAddress = "0x4b9990370a346f15c8B554101590a1A75555275C";
 

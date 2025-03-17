@@ -6,16 +6,16 @@ export async function GET() {
       header:
         "eyJmaWQiOjQwNTk0MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweEQxYTQxODBmN0Y5MmE3YjM5YjFlRUNDN0Q2MUU1NzNFOTY1QTVjRmMifQ",
       payload:
-        "eyJkb21haW4iOiJiMWM5LTJhMDItYzdjLWE4OTItODkwMC1mMDQzLTNlM2YtOGNkOS02ZWMyLm5ncm9rLWZyZWUuYXBwIn0",
+        "eyJkb21haW4iOiIyMzJlLTJhMDItYzdjLWE4OTItODkwMC0yZDI1LTUyZWItNDg0Mi1jZWRlLm5ncm9rLWZyZWUuYXBwIn0",
       signature:
-        "MHgxYjU2YTJiNzYxNmFhNzFiN2NhNjA2NzIwZWMwM2E1OTUzMzFjZTI2Zjk2MGFkZjNjOWU0N2ZiNDVmYzhmOTVjMDMyY2U4Y2UyYTg0NzAzODhiMzAwYjhlNGQ0YzYwMGU3ZDI2OWI1N2ZhMzVkYjJiMDkzZjc1N2JhYzcwNGJjNTFi",
+        "MHgzZWJjMTlmOGVhODIxY2U0ZDI1Y2ExZGE3YzFjMWEwNjdhN2NlMDg0Njk1ZTIyYzA0MjBkYjJkZDkzNzRjYjBiNTA1YWM0N2U3NjIyYTIwN2Q0MDNjYTU4OTkwMWI3ZDRiMjZjN2IxMzFhNTg4NDgxNDFlZGViN2U2ZDBhOTNkYTFi",
     },
     frame: {
       version: "1",
       name: "FundRaider",
-      iconUrl: `${appURL}/fundraider_logo.webp`,
+      iconUrl: `${appURL}/fundraider_logo_padded.webp`,
       homeUrl: `${appURL}`,
-      imageUrl: `${appURL}/fundraider_logo.webp`,
+      imageUrl: `${appURL}/fundraider_logo_padded.webp`,
       buttonTitle: "Fund raid",
       splashImageUrl: `${appURL}/fundraider_logo.webp`,
       splashBackgroundColor: "#D5C0A0",
@@ -27,22 +27,20 @@ export async function GET() {
 }
 
 // {
-// 	("accountAssociation");
-// 	:
-// 	("header");
-// 	: "eyJmaWQiOjQwNTk0MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweEQxYTQxODBmN0Y5MmE3YjM5YjFlRUNDN0Q2MUU1NzNFOTY1QTVjRmMifQ",
-//     "payload": "eyJkb21haW4iOiJiMWM5LTJhMDItYzdjLWE4OTItODkwMC1mMDQzLTNlM2YtOGNkOS02ZWMyLm5ncm9rLWZyZWUuYXBwIn0",
-//     "signature": "MHgxYjU2YTJiNzYxNmFhNzFiN2NhNjA2NzIwZWMwM2E1OTUzMzFjZTI2Zjk2MGFkZjNjOWU0N2ZiNDVmYzhmOTVjMDMyY2U4Y2UyYTg0NzAzODhiMzAwYjhlNGQ0YzYwMGU3ZDI2OWI1N2ZhMzVkYjJiMDkzZjc1N2JhYzcwNGJjNTFi"
-// 	,
-//   "frame":
-// 	("version");
-// 	: "1",
+//   "accountAssociation": {
+//     "header": "eyJmaWQiOjQwNTk0MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweEQxYTQxODBmN0Y5MmE3YjM5YjFlRUNDN0Q2MUU1NzNFOTY1QTVjRmMifQ",
+//     "payload": "eyJkb21haW4iOiIyMzJlLTJhMDItYzdjLWE4OTItODkwMC0yZDI1LTUyZWItNDg0Mi1jZWRlLm5ncm9rLWZyZWUuYXBwIn0",
+//     "signature": "MHgzZWJjMTlmOGVhODIxY2U0ZDI1Y2ExZGE3YzFjMWEwNjdhN2NlMDg0Njk1ZTIyYzA0MjBkYjJkZDkzNzRjYjBiNTA1YWM0N2U3NjIyYTIwN2Q0MDNjYTU4OTkwMWI3ZDRiMjZjN2IxMzFhNTg4NDgxNDFlZGViN2U2ZDBhOTNkYTFi"
+//   },
+//   "frame": {
+//     "version": "1",
 //     "name": "Example Frame",
-//     "iconUrl": "https://b1c9-2a02-c7c-a892-8900-f043-3e3f-8cd9-6ec2.ngrok-free.app/icon.png",
-//     "homeUrl": "https://b1c9-2a02-c7c-a892-8900-f043-3e3f-8cd9-6ec2.ngrok-free.app",
-//     "imageUrl": "https://b1c9-2a02-c7c-a892-8900-f043-3e3f-8cd9-6ec2.ngrok-free.app/image.png",
+//     "iconUrl": "https://232e-2a02-c7c-a892-8900-2d25-52eb-4842-cede.ngrok-free.app/icon.png",
+//     "homeUrl": "https://232e-2a02-c7c-a892-8900-2d25-52eb-4842-cede.ngrok-free.app",
+//     "imageUrl": "https://232e-2a02-c7c-a892-8900-2d25-52eb-4842-cede.ngrok-free.app/image.png",
 //     "buttonTitle": "Check this out",
-//     "splashImageUrl": "https://b1c9-2a02-c7c-a892-8900-f043-3e3f-8cd9-6ec2.ngrok-free.app/splash.png",
+//     "splashImageUrl": "https://232e-2a02-c7c-a892-8900-2d25-52eb-4842-cede.ngrok-free.app/splash.png",
 //     "splashBackgroundColor": "#eeccff",
-//     "webhookUrl": "https://b1c9-2a02-c7c-a892-8900-f043-3e3f-8cd9-6ec2.ngrok-free.app/api/webhook"
+//     "webhookUrl": "https://232e-2a02-c7c-a892-8900-2d25-52eb-4842-cede.ngrok-free.app/api/webhook"
+//   }
 // }
