@@ -1,17 +1,16 @@
 "use client";
 
-import type { Transaction } from "@/lib/wallet-api";
+import type { AssetTransfersResult, AssetTransfersWithMetadataResult } from "alchemy-sdk";
 import { formatDistanceToNow } from "date-fns";
 import { motion } from "framer-motion";
 
-// interface TransactionFeedProps {
-// 	transactions: Transaction[];
-// 	loading: boolean;
-// }
+interface TransactionFeedProps {
+	transactions?: AssetTransfersWithMetadataResult[];
+	// loading: boolean;
+}
 
 // { transactions, loading }: TransactionFeedProps
-export function DonationFeed() {
-	const transactions = [];
+export function DonationFeed({ transactions = [] }: TransactionFeedProps) {
 	const loading = false;
 
 	if (loading) {
@@ -38,7 +37,7 @@ export function DonationFeed() {
 			<ul className="divide-y">
 				{transactions.map((tx, index) => (
 					<motion.li
-						key={tx.id}
+						key={tx.uniqueId}
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ delay: index * 0.1 }}
@@ -50,12 +49,14 @@ export function DonationFeed() {
 									{tx.from.slice(0, 6)}...{tx.from.slice(-4)}
 								</p>
 								<p className="text-sm text-gray-500">
-									{formatDistanceToNow(new Date(tx.timestamp), { addSuffix: true })}
+									{formatDistanceToNow(new Date(tx.metadata.blockTimestamp), {
+										addSuffix: true,
+									})}
 								</p>
 							</div>
 							<div className="text-right">
-								<p className="font-bold text-green-600">+{tx.amount.toFixed(4)}</p>
-								<p className="text-xs text-gray-500">{tx.token}</p>
+								<p className="font-bold text-green-600">+{tx.value}</p>
+								<p className="text-xs text-gray-500">{tx.asset}</p>
 							</div>
 						</div>
 					</motion.li>
