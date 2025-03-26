@@ -3,7 +3,7 @@
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import FundRaider from "@/components/FundRaider";
 import { FundraiserError } from "@/components/FundraiserError";
-import { fundraisers } from "@/lib/utils";
+import { fundraisers } from "@/lib/constants";
 import { notFound } from "next/navigation";
 
 // import dynamic from "next/dynamic";
@@ -17,7 +17,7 @@ export default async function Home({
 }: {
   params: { fundraiser: string };
 }) {
-  const { fundraiser } = await params;
+  const { fundraiser } = params;
 
   console.log("params", fundraiser);
 

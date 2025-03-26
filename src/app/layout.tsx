@@ -1,19 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThirdwebProvider } from "thirdweb/react";
 import { Providers } from "./Providers";
 import "./globals.css";
-
-// export const metadata: Metadata = {
-//   title: "Fundraider",
-//   description: "A V2 Frame for fundraising",
-// };
+import { PostHogProvider } from "./PHProvider";
 
 const appURL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 const frame = {
   version: "next",
-  // imageUrl: `${appURL}/opengraph-image`,
   imageUrl: `${appURL}/fundraider_logo.webp`,
   image: `${appURL}/fundraider_logo.webp`,
   button: {
@@ -58,9 +52,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <ThirdwebProvider>
+        <PostHogProvider>
           <Providers>{children}</Providers>
-        </ThirdwebProvider>
+        </PostHogProvider>
       </body>
     </html>
   );

@@ -1,11 +1,8 @@
-import { createThirdwebClient } from "thirdweb";
+import { http, createPublicClient } from "viem";
+import { base, mainnet } from "viem/chains";
+import { networkURL } from "./constants";
 
-const clientId = process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID;
-
-if (!clientId) {
-	throw new Error("Missing clientId");
-}
-
-export const client = createThirdwebClient({
-	clientId,
+export const publicClient = createPublicClient({
+  chain: mainnet,
+  transport: http(networkURL),
 });

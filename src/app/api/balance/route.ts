@@ -1,5 +1,6 @@
-import { getAlchemyWalletBalance } from "@/lib/utils";
+import { publicClient } from "@/lib/client";
 import { NextResponse } from "next/server";
+import { formatEther } from "viem";
 
 export async function GET(request: Request) {
   try {
@@ -15,11 +16,14 @@ export async function GET(request: Request) {
       );
     }
 
-    const balance = await getAlchemyWalletBalance(address);
+    const balance = await publicClient.getBalance({
+      address,
+      blockTag: "latest",
+    });
 
     return NextResponse.json(
       {
-        balance: balance._hex,
+        balance: formatEther(BigInt(balance)),
       },
       { status: 200 },
     );
