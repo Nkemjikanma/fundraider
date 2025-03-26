@@ -10,8 +10,6 @@ export const rosaliesAddress = "0x4b9990370a346f15c8B554101590a1A75555275C";
 
 export const rosaliesName = "Rosalie";
 
-export const thirdwebClientId = process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID;
-
 export const alchemySettings = {
   apiKey: alchemyApiKey,
   network: Network.BASE_MAINNET,
