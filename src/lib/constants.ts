@@ -1,5 +1,5 @@
 import { Alchemy, Network } from "alchemy-sdk";
-import type { Token } from "./types";
+import type { FundRaisers, Token } from "./types";
 
 export const appURL =
   process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -42,5 +42,25 @@ export const TOKENS: Token[] = [
       "https://assets.coingecko.com/coins/images/34515/standard/android-chrome-512x512.png?1706198225",
     address: "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
     decimals: 18,
+  },
+];
+
+export const fundraisers: FundRaisers = [
+  {
+    id: "rosalie",
+    fundraiserAddress: {
+      address: rosaliesAddress,
+      ensName: "rosaliesrainbow.eth",
+      farcaster: "rosaliesrainbow",
+    },
+    title: "2 ETH for Rosalie",
+    description: "Running to raise 2 ETH for Rosalie's hiking cart",
+    goal: 2,
+    status: "active",
+    currency: "ETH",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    endDate: new Date(new Date().setMonth(new Date().getMonth() + 2)),
+    creator: "nkemjika",
   },
 ];

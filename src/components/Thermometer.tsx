@@ -1,7 +1,7 @@
 "use client";
 
+import { fundraisers } from "@/lib/constants";
 import { useBalance } from "@/lib/hooks/useBalance";
-import { fundraisers } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { formatEther } from "viem";

@@ -3,11 +3,10 @@ import { DonationFeed } from "@/components/DonationFeed";
 import { Thermometer } from "@/components/Thermometer";
 import { config } from "@/components/providers/Wagmi";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TOKENS, appURL } from "@/lib/constants";
+import { TOKENS, appURL, fundraisers } from "@/lib/constants";
 import { useBalance } from "@/lib/hooks/useBalance";
 import { useTransactions } from "@/lib/hooks/useTransactions";
 import type { Token } from "@/lib/types";
-import { fundraisers } from "@/lib/utils";
 import sdk from "@farcaster/frame-sdk";
 import { getBalance, injected } from "@wagmi/core";
 import {

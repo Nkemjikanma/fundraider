@@ -1,4 +1,4 @@
-import { fundraisers } from "@/lib/utils";
+import { fundraisers } from "@/lib/constants";
 import { useState } from "react";
 import { useTransaction } from "wagmi";
 import { Button } from "./ui/button";

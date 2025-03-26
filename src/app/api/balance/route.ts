@@ -1,5 +1,4 @@
 import { publicClient } from "@/lib/client";
-import { getAlchemyWalletBalance } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { formatEther } from "viem";
 
