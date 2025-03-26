@@ -1,23 +1,31 @@
 "use client";
 
+import { useBalance } from "@/lib/hooks/useBalance";
+import { fundraisers } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { formatEther } from "viem";
 
 interface ThermometerProps {
-  progress: number;
-  goal: number;
-  balance: number;
+  fundraiserId?: string;
+  // progress: number;
+  // goal: number;
+  // balance: number;
 }
 
-export function Thermometer({
-  // progress,
-  goal,
-  balance,
-  progress: externalProgress,
-}: ThermometerProps) {
-  const [progress, setProgress] = useState(externalProgress);
+export function Thermometer({ fundraiserId }: ThermometerProps) {
+  // const [progress, setProgress] = useState(externalProgress);
   const [time, setTime] = useState(0);
   const requestRef = useRef<number>(0);
+  const fundraiser = fundraisers[0];
+
+  const {
+    data: balanceData,
+    isLoading: isBalanceLoading,
+    error: balanceError,
+  } = useBalance(fundraiser.fundraiserAddress.address);
+  const raised = balanceData ? balanceData.balance : "0";
+  const progress = (Number(raised) / fundraiser.goal) * 100;
 
   // Animation loop for flowing effect
   useEffect(() => {

@@ -13,7 +13,6 @@ const appURL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 const frame = {
   version: "next",
-  // imageUrl: `${appURL}/opengraph-image`,
   imageUrl: `${appURL}/fundraider_logo.webp`,
   image: `${appURL}/fundraider_logo.webp`,
   button: {

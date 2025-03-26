@@ -1,15 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
+import { getWalletBalance } from "../services";
 
 export function useBalance(address: string) {
   return useQuery({
     queryKey: ["balance", address],
-    queryFn: async () => {
-      const response = await fetch(`/api/balance?address=${address}`);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    },
+    queryFn: () => getWalletBalance(address),
     staleTime: 30000,
   });
 }
