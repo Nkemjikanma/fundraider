@@ -218,7 +218,7 @@ export default function FundRaider({ param }: { param: string }) {
       if (selectedToken.symbol === "ETH") {
         sendTransaction(
           {
-            to: fundraiser.fundraiserAddress.address,
+            to: fundraiser.fundraiserAddress.address as `0x${string}`,
             value: parseEther(customAmount),
           },
           {
@@ -252,7 +252,7 @@ export default function FundRaider({ param }: { param: string }) {
             },
           ],
           args: [
-            fundraiser.fundraiserAddress.address,
+            fundraiser.fundraiserAddress.address as `0x${string}`,
             parseUnits(customAmount, selectedToken.decimals),
           ],
         });

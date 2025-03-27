@@ -6,18 +6,12 @@ import { FundraiserError } from "@/components/FundraiserError";
 import { fundraisers } from "@/lib/constants";
 import { notFound } from "next/navigation";
 
-// import dynamic from "next/dynamic";
-
-// export const revalidate = 300;
-
-// const FundRaider = dynamic(() => import("@/components/FundRaider.tsx"), { ssr: false });
-
 export default async function Home({
   params,
 }: {
-  params: { fundraiser: string };
+  params: Promise<{ fundraiser: string }>;
 }) {
-  const { fundraiser } = params;
+  const { fundraiser } = await params;
 
   console.log("params", fundraiser);
 

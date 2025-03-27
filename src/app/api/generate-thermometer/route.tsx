@@ -1,4 +1,3 @@
-import { Thermometer } from "@/components/Thermometer";
 import { appURL } from "@/lib/constants";
 import { fundraisers } from "@/lib/constants";
 import { ImageResponse } from "next/og";

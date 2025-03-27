@@ -1,5 +1,4 @@
-import type { Token } from "@/lib/types";
-import { getValidTokens } from "@/services";
+import { getValidTokens } from "@/lib/services";
 import { useQuery } from "@tanstack/react-query";
 
 export function useValidTokens(address: string | undefined) {
