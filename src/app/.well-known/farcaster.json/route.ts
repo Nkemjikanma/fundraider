@@ -6,9 +6,9 @@ export async function GET() {
       header:
         "eyJmaWQiOjQwNTk0MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweEQxYTQxODBmN0Y5MmE3YjM5YjFlRUNDN0Q2MUU1NzNFOTY1QTVjRmMifQ",
       payload:
-        "eyJkb21haW4iOiIwMjNhLTJhMDItYzdjLWE4OTItODkwMC1jOWMtN2ExYy00MC1iODkwLm5ncm9rLWZyZWUuYXBwIn0",
+        "eyJkb21haW4iOiJmdW5kcmFpZGVyLm5rZW1qaWthb2hhbnllcmUud29ya2Vycy5kZXYifQ",
       signature:
-        "MHg1OTU2ODJjMGJjODYxMjNjMWFhZDUxNzNjOTlkOTMxMTJhYmE0MjU1NTdhYmVkMDJiOThiZTBkZDE2YmNmNDkwNGRjM2VjYzAzOTVkNzg4OTExZGZhNThmYzJhZDViNjg2ZjhjNGQzM2FiY2NmMWY1MjExNmU0YTU1ODk4MGQ2ZTFi",
+        "MHgyMjFlMDY5ZWViOWE4ZWU2MWRiMGYwN2I4ZjE1MWMyZDg1ZTY4ZjhhYjZjZGY4ZDZmNTg5OTNhNDk0NDBjZTE4MmM5YTAwMjYwMTU5YzM0MTI4Yzg4NTkxMDA0MTk2ZDk0MWM1MTJlNDZlNjVlMmU4NzNjYzVmYzkzMmVmZjRjYzFj",
     },
     frame: {
       version: "1",
@@ -29,18 +29,18 @@ export async function GET() {
 // {
 //   "accountAssociation": {
 //     "header": "eyJmaWQiOjQwNTk0MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweEQxYTQxODBmN0Y5MmE3YjM5YjFlRUNDN0Q2MUU1NzNFOTY1QTVjRmMifQ",
-//     "payload": "eyJkb21haW4iOiIwMjNhLTJhMDItYzdjLWE4OTItODkwMC1jOWMtN2ExYy00MC1iODkwLm5ncm9rLWZyZWUuYXBwIn0",
-//     "signature": "MHg1OTU2ODJjMGJjODYxMjNjMWFhZDUxNzNjOTlkOTMxMTJhYmE0MjU1NTdhYmVkMDJiOThiZTBkZDE2YmNmNDkwNGRjM2VjYzAzOTVkNzg4OTExZGZhNThmYzJhZDViNjg2ZjhjNGQzM2FiY2NmMWY1MjExNmU0YTU1ODk4MGQ2ZTFi"
+//     "payload": "eyJkb21haW4iOiJmdW5kcmFpZGVyLm5rZW1qaWthb2hhbnllcmUud29ya2Vycy5kZXYifQ",
+//     "signature": "MHgyMjFlMDY5ZWViOWE4ZWU2MWRiMGYwN2I4ZjE1MWMyZDg1ZTY4ZjhhYjZjZGY4ZDZmNTg5OTNhNDk0NDBjZTE4MmM5YTAwMjYwMTU5YzM0MTI4Yzg4NTkxMDA0MTk2ZDk0MWM1MTJlNDZlNjVlMmU4NzNjYzVmYzkzMmVmZjRjYzFj"
 //   },
 //   "frame": {
 //     "version": "1",
 //     "name": "Example Frame",
-//     "iconUrl": "https://023a-2a02-c7c-a892-8900-c9c-7a1c-40-b890.ngrok-free.app/icon.png",
-//     "homeUrl": "https://023a-2a02-c7c-a892-8900-c9c-7a1c-40-b890.ngrok-free.app",
-//     "imageUrl": "https://023a-2a02-c7c-a892-8900-c9c-7a1c-40-b890.ngrok-free.app/image.png",
+//     "iconUrl": "https://fundraider.nkemjikaohanyere.workers.dev/icon.png",
+//     "homeUrl": "https://fundraider.nkemjikaohanyere.workers.dev",
+//     "imageUrl": "https://fundraider.nkemjikaohanyere.workers.dev/image.png",
 //     "buttonTitle": "Check this out",
-//     "splashImageUrl": "https://023a-2a02-c7c-a892-8900-c9c-7a1c-40-b890.ngrok-free.app/splash.png",
+//     "splashImageUrl": "https://fundraider.nkemjikaohanyere.workers.dev/splash.png",
 //     "splashBackgroundColor": "#eeccff",
-//     "webhookUrl": "https://023a-2a02-c7c-a892-8900-c9c-7a1c-40-b890.ngrok-free.app/api/webhook"
+//     "webhookUrl": "https://fundraider.nkemjikaohanyere.workers.dev/api/webhook"
 //   }
 // }
