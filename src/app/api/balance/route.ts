@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     }
 
     const balance = await publicClient.getBalance({
-      address,
+      address: address as `0x${string}`,
       blockTag: "latest",
     });
 
