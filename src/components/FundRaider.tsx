@@ -471,7 +471,7 @@ export default function FundRaider({ param }: { param: string }) {
             variant="secondary"
             className="rounded-none bg-black/80 text-white px-4 py-2"
           >
-            🚧 Beta - Support Rosalie's Campaign
+            🚧 Beta - Currently focusing on Rosalie's Campaign
           </Badge>
         </div>
         <div>
