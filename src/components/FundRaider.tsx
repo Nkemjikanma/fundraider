@@ -364,6 +364,20 @@ export default function FundRaider({ param }: { param: string }) {
                     placeholder="0.0"
                     value={customAmount}
                     onChange={(e) => setCustomAmount(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Escape") {
+                        inputRef?.current?.blur();
+                      }
+
+                      if (
+                        e.key === "Enter" &&
+                        isConnected &&
+                        customAmount &&
+                        !isSendTxPending
+                      ) {
+                        handleDonateClick();
+                      }
+                    }}
                     className="pl-[130px] rounded-none"
                   />
                 </div>
