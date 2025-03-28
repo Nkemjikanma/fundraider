@@ -55,6 +55,7 @@ export default function FundRaider({ param }: { param: string }) {
   //TODO: get current fundraiser data using param
   const fundraiser = fundraisers[0];
 
+  const inputRef = useRef<HTMLInputElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showQuickDonateError, setShowQuickDonateError] = useState(false);
   const [showTransactionFlow, setShowTransactionFlow] = useState(false);
@@ -94,12 +95,14 @@ export default function FundRaider({ param }: { param: string }) {
 
   useEffect(() => {
     const load = async () => {
-      sdk.actions.ready();
+      if (sdk) {
+        sdk.actions.ready();
+        setIsLoaded(true);
+      }
     };
 
-    if (sdk && !isLoaded) {
+    if (!isLoaded) {
       load();
-      setIsLoaded(true);
     }
   }, [isLoaded]);
 
@@ -355,6 +358,7 @@ export default function FundRaider({ param }: { param: string }) {
                     </SelectContent>
                   </Select>
                   <Input
+                    ref={inputRef}
                     type="number"
                     inputMode="decimal"
                     placeholder="0.0"
