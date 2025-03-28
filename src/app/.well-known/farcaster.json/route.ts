@@ -5,9 +5,9 @@ export async function GET() {
     accountAssociation: {
       header:
         "eyJmaWQiOjQwNTk0MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweEQxYTQxODBmN0Y5MmE3YjM5YjFlRUNDN0Q2MUU1NzNFOTY1QTVjRmMifQ",
-      payload: "eyJkb21haW4iOiJmdW5kcmFpZGVyLm5rZW0ud29ya2Vycy5kZXYifQ",
+      payload: "eyJkb21haW4iOiJ3d3cuZnVuZHJhaWRlci54eXoifQ",
       signature:
-        "MHg2YzhlNzIyYjU2MjE5ZDBiYWU1Nzk2ZmQ4ZjY1N2QzMTBiMzAxMzEwZDc4YmMzMWYzNDA4YTU5NjY5MWM5MmYzMDM2YzJhMTlhNjBjZTM2YjI2NDYxNzk2MjQ3ZTFhYjJjNjIwNzNhN2U3MGRmZDIzODM0MjA1OWQ3ZjJiMzhkOTFi",
+        "MHhhMmIxNTZlZjJhNjcxMzJkNjI4N2NmY2ZlZDE0ODk2MDE0ZTQ0NzEzN2E5ZTUyYWU3ZjYyZjA2M2Y2ODU3ZTYzN2NkMzFkNDI4NzhhYWU0YmZiN2FiZjRhOWYxNzljOWViZjU3NjFiNmMzNjhmZWJjNjFiODZlMjliMTBlODIxZjFj",
     },
     frame: {
       version: "1",
@@ -30,18 +30,18 @@ export async function GET() {
 // 	:
 // 	("header");
 // 	: "eyJmaWQiOjQwNTk0MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweEQxYTQxODBmN0Y5MmE3YjM5YjFlRUNDN0Q2MUU1NzNFOTY1QTVjRmMifQ",
-//     "payload": "eyJkb21haW4iOiJmdW5kcmFpZGVyLm5rZW0ud29ya2Vycy5kZXYifQ",
-//     "signature": "MHg2YzhlNzIyYjU2MjE5ZDBiYWU1Nzk2ZmQ4ZjY1N2QzMTBiMzAxMzEwZDc4YmMzMWYzNDA4YTU5NjY5MWM5MmYzMDM2YzJhMTlhNjBjZTM2YjI2NDYxNzk2MjQ3ZTFhYjJjNjIwNzNhN2U3MGRmZDIzODM0MjA1OWQ3ZjJiMzhkOTFi"
+//     "payload": "eyJkb21haW4iOiJ3d3cuZnVuZHJhaWRlci54eXoifQ",
+//     "signature": "MHhhMmIxNTZlZjJhNjcxMzJkNjI4N2NmY2ZlZDE0ODk2MDE0ZTQ0NzEzN2E5ZTUyYWU3ZjYyZjA2M2Y2ODU3ZTYzN2NkMzFkNDI4NzhhYWU0YmZiN2FiZjRhOWYxNzljOWViZjU3NjFiNmMzNjhmZWJjNjFiODZlMjliMTBlODIxZjFj"
 // 	,
 //   "frame":
 // 	("version");
 // 	: "1",
 //     "name": "Example Frame",
-//     "iconUrl": "https://fundraider.nkem.workers.dev/icon.png",
-//     "homeUrl": "https://fundraider.nkem.workers.dev",
-//     "imageUrl": "https://fundraider.nkem.workers.dev/image.png",
+//     "iconUrl": "https://www.fundraider.xyz/icon.png",
+//     "homeUrl": "https://www.fundraider.xyz",
+//     "imageUrl": "https://www.fundraider.xyz/image.png",
 //     "buttonTitle": "Check this out",
-//     "splashImageUrl": "https://fundraider.nkem.workers.dev/splash.png",
+//     "splashImageUrl": "https://www.fundraider.xyz/splash.png",
 //     "splashBackgroundColor": "#eeccff",
-//     "webhookUrl": "https://fundraider.nkem.workers.dev/api/webhook"
+//     "webhookUrl": "https://www.fundraider.xyz/api/webhook"
 // }

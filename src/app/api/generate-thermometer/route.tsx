@@ -324,7 +324,6 @@ export async function GET(request: NextRequest) {
                 >
                   <img
                     src={`${appURL}/rosalie.jpg`}
-                    // src={"https://fundraider.nkem.workers.dev/rosalie.jpg"}
                     alt="Rosalie"
                     style={{
                       width: "300px",
