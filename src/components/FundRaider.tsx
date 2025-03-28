@@ -9,14 +9,7 @@ import { useTransactions } from "@/lib/hooks/useTransactions";
 import type { Token } from "@/lib/types";
 import sdk from "@farcaster/frame-sdk";
 import { getBalance, injected } from "@wagmi/core";
-import {
-  ArrowLeft,
-  Clock,
-  ExternalLink,
-  EyeOff,
-  Share2,
-  WalletIcon,
-} from "lucide-react";
+import { ArrowLeft, Clock, ExternalLink, EyeOff, Share2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -34,22 +27,11 @@ import {
 } from "wagmi";
 
 import { base } from "wagmi/chains";
+import { DonationSection } from "./DonationSections";
 import { SplashContainer } from "./SplashContainer";
-import { TransactionFlow } from "./TransactionFlow";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
-
-const FIXED_AMOUNTS = [0.01, 0.05, 0.1, 0.25, 0.5, 1];
 
 export default function FundRaider({ param }: { param: string }) {
   //TODO: get current fundraiser data using param
@@ -267,186 +249,6 @@ export default function FundRaider({ param }: { param: string }) {
     }
   }, [sendTransaction, customAmount, fundraiser.fundraiserAddress.address]);
 
-  const DonationSection = () => (
-    <Card className="w-full mt-4 z-10">
-      <CardContent className="p-6">
-        <div className="space-y-6">
-          {/* Connected Wallet Info */}
-          <div className="flex items-center justify-between p-3 bg-gray-50">
-            <div className="flex items-center gap-2">
-              <WalletIcon className="w-5 h-5 text-gray-500" />
-              <span className="text-sm font-medium">Connected Wallet</span>
-            </div>
-            {isConnected ? (
-              <code className="text-sm bg-white px-2 py-1">
-                {userAddress?.slice(0, 6)}...{userAddress?.slice(-4)}
-              </code>
-            ) : (
-              <Button
-                onClick={() =>
-                  isConnected
-                    ? disconnect()
-                    : connect({ connector: config.connectors[0] })
-                }
-                variant="outline"
-                size="sm"
-              >
-                Connect Wallet
-              </Button>
-            )}
-          </div>
-
-          {/* Fixed Amount Buttons */}
-          <div className="space-y-2">
-            <Label>Quick Donate</Label>
-            <div className="grid grid-cols-3 gap-2">
-              {FIXED_AMOUNTS.map((amount) => (
-                <Button
-                  key={amount}
-                  variant="outline"
-                  onClick={() => handleQuickDonateButtons(amount)}
-                  className="w-full rounded-none"
-                  disabled={!isConnected}
-                >
-                  {amount} ETH
-                </Button>
-              ))}
-            </div>
-            {showQuickDonateError && (
-              <p className="text-red-500 text-xs">
-                Not enough ETH in thy wallet <span className="ml-1">👎🏾</span>
-              </p>
-            )}
-          </div>
-
-          {/* Custom Amount Input */}
-          <div className="space-y-2">
-            <Label>Custom Amount</Label>
-            <div className="flex gap-2">
-              <div className="flex-1">
-                <div className="relative flex items-center">
-                  <Select
-                    value={selectedToken.symbol}
-                    onValueChange={(value) => {
-                      setSelectedToken(
-                        TOKENS.find((token) => token.symbol === value) ??
-                          TOKENS[0],
-                      );
-                      setCustomAmount("0.0");
-                    }}
-                    defaultValue={TOKENS[0].symbol}
-                  >
-                    <SelectTrigger className="w-[100px] absolute left-0 z-10 rounded-none">
-                      <SelectValue
-                        placeholder="Token"
-                        defaultValue={TOKENS[0].symbol}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {TOKENS.map((token) => (
-                        <SelectItem key={token.symbol} value={token.symbol}>
-                          <div className="flex items-center gap-2">
-                            <img
-                              src={token.image}
-                              alt={token.symbol}
-                              className="w-4 h-4"
-                            />
-                            {token.symbol}
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    ref={inputRef}
-                    type="number"
-                    inputMode="decimal"
-                    placeholder="0.0"
-                    value={customAmount}
-                    onChange={(e) => setCustomAmount(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Escape") {
-                        inputRef?.current?.blur();
-                      }
-
-                      if (
-                        e.key === "Enter" &&
-                        isConnected &&
-                        customAmount &&
-                        !isSendTxPending
-                      ) {
-                        handleDonateClick();
-                      }
-                    }}
-                    className="pl-[130px] rounded-none"
-                  />
-                </div>
-              </div>
-              <Button
-                onClick={handleDonateClick}
-                disabled={
-                  !isConnected ||
-                  !customAmount ||
-                  isSendTxPending ||
-                  Number(customAmount) <= 0
-                }
-                className="bg-teal-500 hover:bg-teal-600 rounded-none"
-              >
-                {isConnected ? "Donate" : "Connect Wallet"}
-              </Button>
-            </div>
-          </div>
-
-          {/* Max Button and Balance */}
-          <div className="flex justify-between items-center text-sm text-gray-500">
-            <button
-              type="button"
-              disabled={!isConnected || !userAddress}
-              onClick={handleMaxClick}
-              className="text-teal-600 hover:text-teal-700"
-            >
-              Max
-            </button>
-            <span>{Number(maxAmount).toFixed(4)}</span>{" "}
-            {/* Replace with actual balance */}
-          </div>
-        </div>
-        {showTransactionFlow && (
-          <TransactionFlow
-            amount={customAmount}
-            token={selectedToken.symbol}
-            recipient={fundraiser.fundraiserAddress.address}
-            onConfirm={sendTx}
-            isConfirming={isConfirming}
-            isConfirmed={isConfirmed}
-            linkToBaseScan={linkToBaseScan}
-            onClose={() => setShowTransactionFlow(false)}
-          />
-        )}
-
-        {/* // Transaction status */}
-        <div>
-          {isConfirming && (
-            <div className="text-orange-500 text-center mt-4">
-              ⏳ Waiting for confirmation...
-            </div>
-          )}
-
-          {isConfirmed && (
-            <Button
-              variant="link"
-              className="text-green-500 text-center mt-4"
-              onClick={() => linkToBaseScan()}
-            >
-              <p>🎉 Transaction Confirmed!</p>
-              <p>Tap to View on Basescan</p>
-            </Button>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-[#D5C0A0]">
@@ -570,7 +372,29 @@ export default function FundRaider({ param }: { param: string }) {
         </div>
 
         {/* Donations */}
-        <DonationSection />
+        <DonationSection
+          isConnected={isConnected}
+          userAddress={userAddress}
+          customAmount={customAmount}
+          setCustomAmount={setCustomAmount}
+          selectedToken={selectedToken}
+          setSelectedToken={setSelectedToken}
+          handleDonateClick={handleDonateClick}
+          isSendTxPending={isSendTxPending}
+          handleMaxClick={handleMaxClick}
+          maxAmount={maxAmount}
+          showTransactionFlow={showTransactionFlow}
+          showQuickDonateError={showQuickDonateError}
+          handleQuickDonateButtons={handleQuickDonateButtons}
+          disconnect={disconnect}
+          connect={connect}
+          fundraiser={fundraiser}
+          sendTx={sendTx}
+          isConfirming={isConfirming}
+          isConfirmed={isConfirmed}
+          linkToBaseScan={linkToBaseScan}
+          setShowTransactionFlow={setShowTransactionFlow}
+        />
 
         {/* Campaign Details */}
         <Tabs defaultValue="about" className="w-full mt-6 z-10">
