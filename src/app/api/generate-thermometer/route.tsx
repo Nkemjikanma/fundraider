@@ -1,8 +1,6 @@
 import { appURL } from "@/lib/constants";
 import { fundraisers } from "@/lib/constants";
-// import { ImageResponse } from "next/og";
-import { ImageResponse } from "@vercel/og";
-// import { ImageResponse } from "@cloudflare/pages-plugin-vercel-og/api";
+import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
