@@ -5,11 +5,9 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 type SharePageProps = {
-  // params:
   searchParams: Promise<{
     fundraiserId: string;
     raised: string;
-    // userId: string;
     mt: string;
     mb: string;
     ml: string;
@@ -22,7 +20,9 @@ export async function generateMetadata({
 }: SharePageProps): Promise<Metadata> {
   try {
     const timestamp = Date.now();
+
     const { fundraiserId, raised, mt, mb, ml, mr } = await searchParams;
+
     const thermometerImageURL = `${appURL}/api/generate-thermometer?fundraiserId=${fundraiserId}&raised=${raised}&mt=${mt}&mb=${mb}&ml=${ml}&mr=${mr}&t=${timestamp}`;
     const frame = {
       version: "next",

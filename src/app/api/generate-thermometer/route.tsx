@@ -1,17 +1,20 @@
 import { appURL } from "@/lib/constants";
 import { fundraisers } from "@/lib/constants";
-import { ImageResponse } from "next/og";
+// import { ImageResponse } from "next/og";
+import { ImageResponse } from "@vercel/og";
+// import { ImageResponse } from "@cloudflare/pages-plugin-vercel-og/api";
 import type { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
+  console.log(request);
+  const headers = new Headers({
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    Pragma: "no-cache",
+    Expires: "0",
+  });
   try {
-    const headers = new Headers({
-      "Cache-Control": "no-cache, no-store, must-revalidate",
-      Pragma: "no-cache",
-      Expires: "0",
-    });
-
     const searchParams = request.nextUrl.searchParams;
+    console.log("Search params:", Object.fromEntries(searchParams.entries()));
     const fundraiserId = searchParams.get("fundraiserId");
     const raised = Number.parseFloat(searchParams.get("raised") || "0");
     const mt = searchParams.get("mt");
@@ -29,6 +32,8 @@ export async function GET(request: NextRequest) {
       return new Response("Fundraiser not found", { status: 404 });
     }
 
+    console.log(fundraiserId, raised);
+
     return new ImageResponse(
       (
         <div
@@ -40,7 +45,6 @@ export async function GET(request: NextRequest) {
             width: "100%",
             height: "100%",
             padding: `${mt}px ${mr}px ${mb}px ${ml}px`,
-            fontFamily: "Press Start 2P",
             position: "relative",
             overflow: "hidden",
           }}
@@ -320,6 +324,7 @@ export async function GET(request: NextRequest) {
                 >
                   <img
                     src={`${appURL}/rosalie.jpg`}
+                    // src={"https://fundraider.nkem.workers.dev/rosalie.jpg"}
                     alt="Rosalie"
                     style={{
                       width: "300px",
@@ -399,8 +404,30 @@ export async function GET(request: NextRequest) {
         headers: headers,
       },
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error);
-    return new Response("Internal Server Error", { status: 500 });
+
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            display: "flex",
+            fontSize: 30,
+            color: "white",
+            background: "red",
+            width: "100%",
+            height: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            padding: "40px",
+          }}
+        >
+          Error generating image: {errorMessage}
+        </div>
+      ),
+      { width: 1200, height: 630, headers: headers },
+    );
   }
 }
