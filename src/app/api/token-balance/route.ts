@@ -4,9 +4,9 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const address = searchParams.get("address");
-  const token = searchParams.get("token");
+  const tokenAddress = searchParams.get("tokenAddress");
 
-  if (!address || !token) {
+  if (!address || !tokenAddress) {
     return NextResponse.json(
       { error: "Missing address or token parameter" },
       { status: 400 },
@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const balance = await getAlchemyTokenBalance(address, token);
+    const balance = await getAlchemyTokenBalance(address, tokenAddress);
 
     return NextResponse.json({ balance: balance?.balance }, { status: 200 });
   } catch (error) {

@@ -102,23 +102,21 @@ export default function FundRaider({ param }: { param: string }) {
       }
 
       try {
-        const quickDonateEth = await getTokenBalance(
+        const tokenBalance = await getTokenBalance(
           userAddress,
           TOKENS[0].address,
         );
 
-        console.log(quickDonateEth);
+        console.log(tokenBalance);
 
         // const formattedBalance = Number(
         //   formatUnits(ownerTokensWagmi.value, ownerTokensWagmi.decimals),
         // );
 
-        if (Number(quickDonateEth) > Number(customAmount)) {
+        if (Number(tokenBalance) > Number(customAmount)) {
           setCustomAmount(Number(amount).toFixed(4).toString());
           setSelectedToken(TOKENS[0]);
           setShowTransactionFlow(true);
-
-          return;
         }
         setShowQuickDonateError(true);
       } catch (error) {
@@ -137,9 +135,12 @@ export default function FundRaider({ param }: { param: string }) {
   const handleMaxClick = async () => {
     if (!userAddress) return;
     try {
-      const balance = await getTokenBalance(userAddress, selectedToken.address);
+      const tokenBalance = await getTokenBalance(
+        userAddress,
+        selectedToken.address,
+      );
 
-      setCustomAmount(Number(balance).toFixed(4).toString());
+      setCustomAmount(Number(tokenBalance).toFixed(4).toString());
     } catch (error) {
       console.error("Error fetching balance:", error);
     }
