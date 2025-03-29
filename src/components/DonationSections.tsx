@@ -237,7 +237,7 @@ export const DonationSection = ({
           )}
 
           {isConfirmed && (
-            <div className="relative w-full flex flex-col items-center justify-center">
+            <div className="relative w-fit flex flex-col items-center justify-center">
               <Button
                 variant="link"
                 className="text-green-500 text-center mt-4"
