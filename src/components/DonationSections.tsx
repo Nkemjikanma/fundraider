@@ -108,7 +108,9 @@ export const DonationSection = ({
                   key={amount}
                   variant="outline"
                   onClick={() => handleQuickDonateButtons(amount)}
-                  className="w-full rounded-none"
+                  className={`w-full rounded-none ${
+                    !isConnected ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                   disabled={!isConnected || !userAddress}
                 >
                   {amount} ETH

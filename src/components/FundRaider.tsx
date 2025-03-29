@@ -37,7 +37,6 @@ export default function FundRaider({ param }: { param: string }) {
   //TODO: get current fundraiser data using param
   const fundraiser = fundraisers[0];
 
-  const inputRef = useRef<HTMLInputElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showQuickDonateError, setShowQuickDonateError] = useState(false);
   const [showTransactionFlow, setShowTransactionFlow] = useState(false);
@@ -102,23 +101,23 @@ export default function FundRaider({ param }: { param: string }) {
       }
 
       try {
-        const tokenBalance = await getTokenBalance(
-          userAddress,
-          TOKENS[0].address,
+        const ownerTokensWagmi = await getBalance(config, {
+          address: userAddress,
+          blockTag: "latest",
+          chainId: base.id,
+        });
+
+        const formattedBalance = Number(
+          formatUnits(ownerTokensWagmi.value, ownerTokensWagmi.decimals),
         );
 
-        console.log(tokenBalance);
-
-        // const formattedBalance = Number(
-        //   formatUnits(ownerTokensWagmi.value, ownerTokensWagmi.decimals),
-        // );
-
-        if (Number(tokenBalance) > Number(customAmount)) {
+        if (Number(formattedBalance) > Number(customAmount)) {
           setCustomAmount(Number(amount).toFixed(4).toString());
           setSelectedToken(TOKENS[0]);
           setShowTransactionFlow(true);
+        } else {
+          setShowQuickDonateError(true);
         }
-        setShowQuickDonateError(true);
       } catch (error) {
         console.error("Error fetching ETH balance:", error);
       }
@@ -135,12 +134,15 @@ export default function FundRaider({ param }: { param: string }) {
   const handleMaxClick = async () => {
     if (!userAddress) return;
     try {
-      const tokenBalance = await getTokenBalance(
-        userAddress,
-        selectedToken.address,
-      );
+      const balance = await getBalance(config, {
+        address: userAddress,
+        token: selectedToken.address as `0x${string}`,
+        chainId: base.id,
+      });
 
-      setCustomAmount(Number(tokenBalance).toFixed(4).toString());
+      const formattedBalance = formatUnits(balance.value, balance.decimals);
+
+      setCustomAmount(Number(formattedBalance).toFixed(4).toString());
     } catch (error) {
       console.error("Error fetching balance:", error);
     }
