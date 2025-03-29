@@ -294,7 +294,16 @@ export async function GET(request: NextRequest) {
                       textAlign: "center",
                     }}
                   >
-                    {raised.toFixed(4)} ETH raised
+                    {raised.toFixed(4)} ETH{" "}
+                    <span
+                      style={{
+                        fontSize: "28px",
+                        color: "#374151",
+                        fontWeight: "700",
+                      }}
+                    >
+                      raised
+                    </span>
                   </span>
                   <span
                     style={{
