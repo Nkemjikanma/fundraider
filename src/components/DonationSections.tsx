@@ -40,6 +40,7 @@ interface DonationSectionProps {
   linkToBaseScan: () => void;
   setShowTransactionFlow: (show: boolean) => void;
   handleShare: (message?: string) => void;
+  isTransactionError: boolean;
 }
 
 const FIXED_AMOUNTS = [0.01, 0.05, 0.1, 0.25, 0.5, 1];
@@ -66,6 +67,7 @@ export const DonationSection = ({
   linkToBaseScan,
   setShowTransactionFlow,
   handleShare,
+  isTransactionError,
 }: DonationSectionProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 

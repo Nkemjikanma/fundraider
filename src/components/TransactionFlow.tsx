@@ -100,7 +100,7 @@ export const TransactionFlow = ({
       {step === "error" && (
         <div>
           <div className="mt-2 p-2 bg-red-50 text-red-600 rounded">
-            {error || "Transaction failed"}
+            Something went wrong. Please click button to try again.
           </div>
           <Button
             type="button"

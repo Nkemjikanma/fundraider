@@ -67,10 +67,13 @@ export default function FundRaider({ param }: { param: string }) {
 
   const { isPending: isSendTxPending, sendTransaction } = useSendTransaction();
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash: txHash as `0x${string}`,
-    });
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    isError: isTransactionError,
+  } = useWaitForTransactionReceipt({
+    hash: txHash as `0x${string}`,
+  });
 
   useEffect(() => {
     const load = async () => {
@@ -398,6 +401,7 @@ export default function FundRaider({ param }: { param: string }) {
           linkToBaseScan={linkToBaseScan}
           setShowTransactionFlow={setShowTransactionFlow}
           handleShare={handleShare}
+          isTransactionError={isTransactionError}
         />
 
         {/* Campaign Details */}
