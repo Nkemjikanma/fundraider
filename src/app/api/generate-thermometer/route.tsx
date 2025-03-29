@@ -294,16 +294,7 @@ export async function GET(request: NextRequest) {
                       textAlign: "center",
                     }}
                   >
-                    {raised.toFixed(4)} ETH{" "}
-                    <span
-                      style={{
-                        fontSize: "28px",
-                        color: "#374151",
-                        fontWeight: "700",
-                      }}
-                    >
-                      raised
-                    </span>
+                    {raised.toFixed(4)} ETH
                   </span>
                   <span
                     style={{
@@ -313,7 +304,7 @@ export async function GET(request: NextRequest) {
                       textAlign: "center",
                     }}
                   >
-                    of {fundraiser.goal.toFixed(1)} ETH goal
+                    raised of {fundraiser.goal.toFixed(1)} ETH goal
                   </span>
 
                   {raised < fundraiser.goal && (
