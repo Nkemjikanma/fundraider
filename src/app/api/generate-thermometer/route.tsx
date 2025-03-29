@@ -3,6 +3,35 @@ import { fundraisers } from "@/lib/constants";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 
+export async function imageToBase64(imageURL: string): Promise<string> {
+  try {
+    new URL(imageURL); // Will throw if invalid
+
+    const response = await fetch(imageURL, {
+      headers: {
+        Accept: "image/*",
+      },
+    });
+    const arrayBuffer = await response.arrayBuffer();
+
+    const uint8Array = new Uint8Array(arrayBuffer);
+    let binaryString = "";
+    uint8Array.forEach((byte) => (binaryString += String.fromCharCode(byte)));
+    const base64String = btoa(binaryString);
+
+    const contentType = response.headers.get("content-type") || "image/jpeg";
+
+    // const base64String = Buffer.from(arrayBuffer).toString("base64");
+
+    console.log(`data:${contentType};base64,${base64String}`);
+
+    return `data:${contentType};base64,${base64String}`;
+  } catch (e) {
+    console.log("Error converting image to base64:", e);
+    throw e;
+  }
+}
+
 export async function GET(request: NextRequest) {
   console.log(request);
   const headers = new Headers({
@@ -31,6 +60,10 @@ export async function GET(request: NextRequest) {
     }
 
     console.log(fundraiserId, raised);
+
+    const imageURL = new URL("/rosalie.jpg", appURL).toString();
+
+    const convertedBase64Image = await imageToBase64(imageURL);
 
     return new ImageResponse(
       (
@@ -321,7 +354,7 @@ export async function GET(request: NextRequest) {
                   }}
                 >
                   <img
-                    src={`${appURL}/rosalie.jpg`}
+                    src={convertedBase64Image || imageURL}
                     alt="Rosalie"
                     style={{
                       width: "300px",

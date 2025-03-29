@@ -17,7 +17,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { formatEther, formatUnits, parseUnits } from "viem";
 import { parseEther } from "viem";
 import {
-  UsePrepareTransactionRequestParameters,
   useAccount,
   useConnect,
   useDisconnect,
@@ -26,6 +25,7 @@ import {
   useWriteContract,
 } from "wagmi";
 
+import { getTokenBalance } from "@/lib/services";
 import { base } from "wagmi/chains";
 import { DonationSection } from "./DonationSections";
 import { SplashContainer } from "./SplashContainer";
@@ -43,7 +43,6 @@ export default function FundRaider({ param }: { param: string }) {
   const [showTransactionFlow, setShowTransactionFlow] = useState(false);
   const [customAmount, setCustomAmount] = useState<string>("");
   const [selectedToken, setSelectedToken] = useState<Token>(TOKENS[0]);
-  const [maxAmount, setMaxAmount] = useState<string>("");
   const [txHash, setTxHash] = useState<string | null>(null);
   const { address: userAddress, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
@@ -98,18 +97,23 @@ export default function FundRaider({ param }: { param: string }) {
     async (amount: number) => {
       if (!userAddress) return;
 
-      try {
-        const ownerTokensWagmi = await getBalance(config, {
-          address: userAddress,
-          blockTag: "latest",
-          chainId: base.id,
-        });
+      if (showTransactionFlow) {
+        setShowTransactionFlow(false);
+      }
 
-        const formattedBalance = Number(
-          formatUnits(ownerTokensWagmi.value, ownerTokensWagmi.decimals),
+      try {
+        const quickDonateEth = await getTokenBalance(
+          userAddress,
+          TOKENS[0].address,
         );
 
-        if (Number(formattedBalance) > Number(customAmount)) {
+        console.log(quickDonateEth);
+
+        // const formattedBalance = Number(
+        //   formatUnits(ownerTokensWagmi.value, ownerTokensWagmi.decimals),
+        // );
+
+        if (Number(quickDonateEth) > Number(customAmount)) {
           setCustomAmount(Number(amount).toFixed(4).toString());
           setSelectedToken(TOKENS[0]);
           setShowTransactionFlow(true);
@@ -121,7 +125,7 @@ export default function FundRaider({ param }: { param: string }) {
         console.error("Error fetching ETH balance:", error);
       }
     },
-    [customAmount, userAddress],
+    [customAmount, userAddress, showTransactionFlow],
   );
 
   const handleDonateClick = async () => {
@@ -133,17 +137,9 @@ export default function FundRaider({ param }: { param: string }) {
   const handleMaxClick = async () => {
     if (!userAddress) return;
     try {
-      const balance = await getBalance(config, {
-        address: userAddress,
-        token: selectedToken.address as `0x${string}`,
-        chainId: base.id,
-      });
+      const balance = await getTokenBalance(userAddress, selectedToken.address);
 
-      const formattedBalance = formatUnits(balance.value, balance.decimals);
-      console.log("formattedBalance", formattedBalance);
-
-      setMaxAmount(formattedBalance);
-      setCustomAmount(Number(formattedBalance).toFixed(4).toString());
+      setCustomAmount(Number(balance).toFixed(4).toString());
     } catch (error) {
       console.error("Error fetching balance:", error);
     }
@@ -171,6 +167,12 @@ export default function FundRaider({ param }: { param: string }) {
         message,
       )}&embeds[]=${encodeURIComponent(url)}`,
     );
+
+    // navigator.clipboard.writeText(
+    //   `https://warpcast.com/~/compose?text=${encodeURIComponent(
+    //     message,
+    //   )}&embeds[]=${encodeURIComponent(url)}`,
+    // );
 
     if (!(await sdk.context)?.user) {
       console.log("here");
@@ -295,14 +297,17 @@ export default function FundRaider({ param }: { param: string }) {
           </Badge>
         </div>
         <div>
-          <Button
-            variant="link"
-            type="button"
+          <div
             onClick={() => router.push("/")}
-            className="relative text-gray-500 hover:text-gray-700 text-xl p-4 hover:underline ease-in"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                router.push("/");
+              }
+            }}
+            className="relative flex flex-row items-center gap-2 text-gray-500 hover:text-gray-700 text-xl p-4 border ease-in transition-all py-1 hover:bg-zinc-200/70"
           >
-            <ArrowLeft className="w-8 h-8" /> Back
-          </Button>
+            <ArrowLeft className="w-4 h-4" /> Back
+          </div>
         </div>
 
         {/* <ServerThermometer fundraiserId={fundraiser.id} raised={raised} /> */}
@@ -382,7 +387,6 @@ export default function FundRaider({ param }: { param: string }) {
           handleDonateClick={handleDonateClick}
           isSendTxPending={isSendTxPending}
           handleMaxClick={handleMaxClick}
-          maxAmount={maxAmount}
           showTransactionFlow={showTransactionFlow}
           showQuickDonateError={showQuickDonateError}
           handleQuickDonateButtons={handleQuickDonateButtons}

@@ -154,62 +154,63 @@ export default function HomePage() {
 
         <div className="relative w-full space-y-4">
           {fundraisers.map((fundraiser) => (
-            <Card
+            <Link
               key={fundraiser.id}
-              className="relative border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3),0_0_40px_rgba(0,0,0,0.1)] hover:shadow-lg hover:shadow-teal-800 transition-shadow"
+              href={"/rosalie"}
+              className="group hover:shadow-md"
             >
-              <CardHeader className="flex flex-row justify-between items-start">
-                <div>
-                  <CardTitle>{fundraiser.title}</CardTitle>
-                  <p className="text-sm text-gray-500">
-                    by {fundraiser.creator}
-                  </p>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    handleShare();
-                  }}
-                >
-                  <Share2 className="w-4 h-4" />
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-4">{fundraiser.description}</p>
-
-                <div className="flex items-center gap-2 mb-2">
-                  <Clock className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm text-gray-500">
-                    {new Date(fundraiser.endDate).toDateString()}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm font-medium">
-                    {Number(raised).toFixed(4)} ETH raised
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    Goal: {fundraiser.goal} ETH
-                  </span>
-                </div>
-
-                <div className="relative w-full bg-gray-200 h-2.5">
-                  <div
-                    className="relative bg-teal-500 h-2.5"
-                    style={{
-                      width: `${(Number(raised) / fundraiser.goal) * 100}%`,
+              <Card className="relative border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3),0_0_40px_rgba(0,0,0,0.1)] group-hover:bg-yellow-100/70 hover:shadow-teal-800 transition-all ">
+                <CardHeader className="flex flex-row justify-between items-start">
+                  <div>
+                    <CardTitle>{fundraiser.title}</CardTitle>
+                    <p className="text-sm text-gray-500">
+                      by {fundraiser.creator}
+                    </p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      handleShare();
                     }}
-                  />
-                </div>
-
-                <Link href={"/rosalie"}>
-                  <Button variant="link" className="mt-4 w-full">
-                    View Details
+                  >
+                    <Share2 className="w-4 h-4" />
                   </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent className="relative flex flex-col items-center">
+                  <p className="text-gray-600 mb-4">{fundraiser.description}</p>
+
+                  <div className="flex items-center gap-2 mb-2">
+                    <Clock className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm text-gray-500">
+                      {new Date(fundraiser.endDate).toDateString()}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium">
+                      {Number(raised).toFixed(4)} ETH raised
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      Goal: {fundraiser.goal} ETH
+                    </span>
+                  </div>
+
+                  <div className="relative w-full bg-gray-200 h-2.5">
+                    <div
+                      className="relative bg-teal-500 h-2.5"
+                      style={{
+                        width: `${(Number(raised) / fundraiser.goal) * 100}%`,
+                      }}
+                    />
+                  </div>
+
+                  <div className="group mt-4 w-1/2 group-hover:underline text-center">
+                    View Details
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </SplashContainer>

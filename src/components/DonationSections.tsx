@@ -26,7 +26,6 @@ interface DonationSectionProps {
   handleDonateClick: () => Promise<void>;
   isSendTxPending: boolean;
   handleMaxClick: () => Promise<void>;
-  maxAmount: string;
   showTransactionFlow: boolean;
   showQuickDonateError: boolean;
   handleQuickDonateButtons: (amount: number) => Promise<void>;
@@ -57,7 +56,6 @@ export const DonationSection = ({
   handleDonateClick,
   isSendTxPending,
   handleMaxClick,
-  maxAmount,
   showTransactionFlow,
   showQuickDonateError,
   handleQuickDonateButtons,
@@ -111,7 +109,7 @@ export const DonationSection = ({
                   variant="outline"
                   onClick={() => handleQuickDonateButtons(amount)}
                   className="w-full rounded-none"
-                  disabled={!isConnected}
+                  disabled={!isConnected || !userAddress}
                 >
                   {amount} ETH
                 </Button>
@@ -212,8 +210,6 @@ export const DonationSection = ({
             >
               Max
             </button>
-            <span>{Number(maxAmount).toFixed(4)}</span>{" "}
-            {/* Replace with actual balance */}
           </div>
         </div>
         {showTransactionFlow && (
