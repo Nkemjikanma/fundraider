@@ -2,6 +2,7 @@ import { appURL } from "@/lib/constants";
 import { fundraisers } from "@/lib/constants";
 import { imageToBase64 } from "@/lib/utils";
 import { ImageResponse } from "@vercel/og";
+// import { unstable_cache } from "next/cache";
 import type { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -114,7 +115,7 @@ export async function GET(request: NextRequest) {
           />
 
           {/* Medium Colorful Elements */}
-          {[...Array(8)].map((_, i) => (
+          {[...Array(4)].map((_, i) => (
             <div
               key={`medium-${i}`}
               style={{
@@ -142,7 +143,7 @@ export async function GET(request: NextRequest) {
           ))}
 
           {/* Sparkles and Small Decorations */}
-          {[...Array(20)].map((_, i) => (
+          {[...Array(10)].map((_, i) => (
             <div
               key={`sparkle-${i}`}
               style={{
@@ -167,7 +168,7 @@ export async function GET(request: NextRequest) {
           ))}
 
           {/* Pixel Art Elements */}
-          {[...Array(25)].map((_, i) => (
+          {[...Array(10)].map((_, i) => (
             <div
               key={`pixel-${i}`}
               style={{
@@ -191,7 +192,7 @@ export async function GET(request: NextRequest) {
           ))}
 
           {/* Glowing Circles */}
-          {[...Array(15)].map((_, i) => (
+          {[...Array(5)].map((_, i) => (
             <div
               key={`glow-${i}`}
               style={{
