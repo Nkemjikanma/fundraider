@@ -268,12 +268,12 @@ export async function GET(request: NextRequest) {
                   flexDirection: "row",
                   gap: "2rem",
                   padding: "10px 20px",
-                  alignItems: "center", // Center vertically
-                  justifyContent: "center", // Center horizontally
+                  alignItems: "center",
+                  justifyContent: "center",
                   width: "100%",
                   height: "auto",
                   position: "relative",
-                  marginBottom: "100px", // Space for the bottom banners
+                  marginBottom: "100px",
                 }}
               >
                 {/* Text Content */}
@@ -294,7 +294,7 @@ export async function GET(request: NextRequest) {
                       textAlign: "center",
                     }}
                   >
-                    {raised.toFixed(4)} ETH
+                    {raised.toFixed(4)} ETH raised
                   </span>
                   <span
                     style={{
@@ -304,7 +304,7 @@ export async function GET(request: NextRequest) {
                       textAlign: "center",
                     }}
                   >
-                    raised of {fundraiser.goal.toFixed(4)} ETH goal
+                    of {fundraiser.goal.toFixed(1)} ETH goal
                   </span>
 
                   {raised < fundraiser.goal && (
