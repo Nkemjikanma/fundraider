@@ -147,8 +147,11 @@ export default function FundRaider({ param }: { param: string }) {
     }
   };
 
-  const handleShare = async () => {
+  const handleShare = async (shareMessage?: string) => {
     console.log("handleShare");
+    const message = shareMessage
+      ? shareMessage
+      : `Let's  help @${fundraiser.fundraiserAddress.farcaster} get her hiking cart. Support Rosalie's fundraiser!`;
 
     const shareSearchParams = new URLSearchParams({
       fundraiserId: fundraiser.id,
@@ -160,7 +163,6 @@ export default function FundRaider({ param }: { param: string }) {
       mr: "50",
     });
 
-    const message = `Let's  help @${fundraiser.fundraiserAddress.farcaster} get her hiking cart. Support Rosalie's fundraiser!`;
     const url = `${appURL}/share?${shareSearchParams}`;
 
     console.log("share url here", url);
@@ -170,12 +172,6 @@ export default function FundRaider({ param }: { param: string }) {
         message,
       )}&embeds[]=${encodeURIComponent(url)}`,
     );
-
-    // navigator.clipboard.writeText(
-    //   `https://warpcast.com/~/compose?text=${encodeURIComponent(
-    //     message,
-    //   )}&embeds[]=${encodeURIComponent(url)}`,
-    // );
 
     if (!(await sdk.context)?.user) {
       console.log("here");
@@ -401,6 +397,7 @@ export default function FundRaider({ param }: { param: string }) {
           isConfirmed={isConfirmed}
           linkToBaseScan={linkToBaseScan}
           setShowTransactionFlow={setShowTransactionFlow}
+          handleShare={handleShare}
         />
 
         {/* Campaign Details */}

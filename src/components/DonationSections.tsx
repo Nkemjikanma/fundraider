@@ -1,8 +1,9 @@
 import { config } from "@/components/providers/Wagmi";
 import { TOKENS } from "@/lib/constants";
-import type { Token } from "@/lib/types";
+import type { Fundraiser, Token } from "@/lib/types";
 import { WalletIcon } from "lucide-react";
 import { useRef } from "react";
+import { Farcaster } from "./Icons/Farcaster";
 import { TransactionFlow } from "./TransactionFlow";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
@@ -32,16 +33,13 @@ interface DonationSectionProps {
   // Additional props needed from parent
   disconnect: () => void;
   connect: (config: any) => void;
-  fundraiser: {
-    fundraiserAddress: {
-      address: string;
-    };
-  };
+  fundraiser: Fundraiser;
   sendTx: () => Promise<void>;
   isConfirming: boolean;
   isConfirmed: boolean;
   linkToBaseScan: () => void;
   setShowTransactionFlow: (show: boolean) => void;
+  handleShare: (message?: string) => void;
 }
 
 const FIXED_AMOUNTS = [0.01, 0.05, 0.1, 0.25, 0.5, 1];
@@ -67,6 +65,7 @@ export const DonationSection = ({
   isConfirmed,
   linkToBaseScan,
   setShowTransactionFlow,
+  handleShare,
 }: DonationSectionProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -236,14 +235,26 @@ export const DonationSection = ({
           )}
 
           {isConfirmed && (
-            <Button
-              variant="link"
-              className="text-green-500 text-center mt-4"
-              onClick={() => linkToBaseScan()}
-            >
-              <p>🎉 Transaction Confirmed!</p>
-              <p>Tap to View on Basescan</p>
-            </Button>
+            <div>
+              <Button
+                variant="link"
+                className="text-green-500 text-center mt-4"
+                onClick={() => linkToBaseScan()}
+              >
+                <p>🎉 Transaction Confirmed!</p>
+                <p>Tap to View on Basescan</p>
+              </Button>
+              <Button
+                variant="link"
+                className="text-green-500 text-center mt-4"
+                onClick={() => {
+                  const message = `I just contributed to getting @${fundraiser.fundraiserAddress.farcaster} her hiking cart. You should too!`;
+                  handleShare(message);
+                }}
+              >
+                Share on <Farcaster />
+              </Button>
+            </div>
           )}
         </div>
       </CardContent>

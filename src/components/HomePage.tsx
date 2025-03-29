@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { formatEther } from "viem";
+import { Farcaster } from "./Icons/Farcaster";
 import { SplashContainer } from "./SplashContainer";
 
 export default function HomePage() {
@@ -75,8 +76,11 @@ export default function HomePage() {
     );
   }
 
-  const handleShare = async () => {
+  const handleShare = async (shareMessage?: string) => {
     console.log("handleShare");
+    const message = shareMessage
+      ? shareMessage
+      : `Let's  help @${fundraiser.fundraiserAddress.farcaster} get her hiking cart. Support Rosalie's fundraiser!`;
 
     const shareSearchParams = new URLSearchParams({
       fundraiserId: fundraiser.id,
@@ -89,7 +93,6 @@ export default function HomePage() {
       mr: "50",
     });
 
-    const message = `You should support @${fundraiser.fundraiserAddress.farcaster}'s fundraiser on Warpcast!`;
     const url = `${appURL}/share?${shareSearchParams}`;
 
     if (!(await sdk.context)?.user) {

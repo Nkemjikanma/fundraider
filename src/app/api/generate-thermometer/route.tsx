@@ -341,7 +341,7 @@ export async function GET(request: NextRequest) {
                       src={decodedImageURL}
                       alt="Rosalie"
                       style={{
-                        width: "300",
+                        width: "280",
                         height: "300",
                         objectFit: "contain",
                         objectPosition: "top",
