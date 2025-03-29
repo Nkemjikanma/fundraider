@@ -25,7 +25,6 @@ import {
   useWriteContract,
 } from "wagmi";
 
-import { getTokenBalance } from "@/lib/services";
 import { base } from "wagmi/chains";
 import { DonationSection } from "./DonationSections";
 import { SplashContainer } from "./SplashContainer";
@@ -154,6 +153,7 @@ export default function FundRaider({ param }: { param: string }) {
     const shareSearchParams = new URLSearchParams({
       fundraiserId: fundraiser.id,
       raised: raised.toString(),
+      imageURL: encodeURIComponent(new URL("/rosalie.jpeg", appURL).toString()),
       mt: "50",
       mb: "50",
       ml: "50",

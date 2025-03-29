@@ -84,6 +84,7 @@ export default function HomePage() {
       // userId: (await sdk.context).user.fid.toString(),
       mt: "50",
       mb: "50",
+      imageURL: encodeURIComponent(new URL("/rosalie.jpeg", appURL).toString()),
       ml: "50",
       mr: "50",
     });

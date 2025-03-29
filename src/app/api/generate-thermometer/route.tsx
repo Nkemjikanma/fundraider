@@ -5,21 +5,23 @@ import { ImageResponse } from "@vercel/og";
 // import { unstable_cache } from "next/cache";
 import type { NextRequest } from "next/server";
 
+export const runtime = "edge";
+
 export async function GET(request: NextRequest) {
   console.log(request);
   const headers = new Headers({
     "Cache-Control": "no-cache, no-store, must-revalidate",
     Pragma: "no-cache",
     Expires: "0",
-    "Content-Type": "image/png",
+    "Content-Type": "image/jpeg",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET",
   });
   try {
     const searchParams = request.nextUrl.searchParams;
-    console.log("Search params:", Object.fromEntries(searchParams.entries()));
     const fundraiserId = searchParams.get("fundraiserId");
     const raised = Number.parseFloat(searchParams.get("raised") || "0");
+    const imageURL = searchParams.get("imageURL");
     const mt = searchParams.get("mt");
     const mb = searchParams.get("mb");
     const ml = searchParams.get("ml");
@@ -37,7 +39,11 @@ export async function GET(request: NextRequest) {
 
     console.log(fundraiserId, raised);
 
-    const imageURL = `${appURL}/rosalie.jpg`;
+    const imageURLFallback = `${appURL}/rosalie.jpeg`;
+    const decodedImageURL = imageURL
+      ? decodeURIComponent(imageURL)
+      : imageURLFallback;
+    // const decodedImage = await imageToBase64(decodedImageURL);
 
     // const convertedBase64Image = await imageToBase64(imageURL);
 
@@ -227,7 +233,7 @@ export async function GET(request: NextRequest) {
               boxShadow:
                 "12px 12px 0px 0px rgba(0,0,0,0.3), 0 0 40px rgba(0,0,0,0.1)",
               position: "relative",
-              zIndex: "1",
+              zIndex: 1,
               overflow: "hidden",
             }}
           >
@@ -329,23 +335,21 @@ export async function GET(request: NextRequest) {
                     width: "45%",
                   }}
                 >
-                  <img
-                    // src={imageURL}
-                    src={`data:image/jpeg;base64,${await fetch(
-                      new URL("/rosalie.jpg", request.url),
-                    )
-                      .then((res) => res.arrayBuffer())
-                      .then((buf) => Buffer.from(buf).toString("base64"))}`}
-                    alt="Rosalie"
-                    style={{
-                      width: "300px",
-                      height: "300px",
-                      objectFit: "cover",
-                      objectPosition: "top",
-                      border: "4px solid #000",
-                      boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.2)",
-                    }}
-                  />
+                  {decodedImageURL && (
+                    <img
+                      // src={imageURL}
+                      src={decodedImageURL}
+                      alt="Rosalie"
+                      style={{
+                        width: "300",
+                        height: "300",
+                        objectFit: "contain",
+                        objectPosition: "top",
+                        border: "4px solid #000",
+                        boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.2)",
+                      }}
+                    />
+                  )}
                 </div>
               </div>
 
