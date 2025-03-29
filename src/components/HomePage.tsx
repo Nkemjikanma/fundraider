@@ -180,22 +180,23 @@ export default function HomePage() {
                 <CardContent className="relative flex flex-col items-center">
                   <p className="text-gray-600 mb-4">{fundraiser.description}</p>
 
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex gap-2 mb-2 w-full items-start">
                     <Clock className="w-4 h-4 text-gray-500" />
                     <span className="text-sm text-gray-500">
                       {new Date(fundraiser.endDate).toDateString()}
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-medium">
-                      {Number(raised).toFixed(4)} ETH raised
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      Goal: {fundraiser.goal} ETH
-                    </span>
+                  <div className="flex flex-row w-full justify-between mt-2">
+                    <div className="flex w-full justify-between items-center">
+                      <span className="text-sm font-medium">
+                        {Number(raised).toFixed(4)} ETH raised
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        Goal: {fundraiser.goal} ETH
+                      </span>
+                    </div>
                   </div>
-
                   <div className="relative w-full bg-gray-200 h-2.5">
                     <div
                       className="relative bg-teal-500 h-2.5"

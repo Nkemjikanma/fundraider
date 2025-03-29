@@ -1,7 +1,7 @@
 import { appURL } from "@/lib/constants";
 import { fundraisers } from "@/lib/constants";
 import { imageToBase64 } from "@/lib/utils";
-import { ImageResponse } from "next/og";
+import { ImageResponse } from "@vercel/og";
 import type { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -10,6 +10,9 @@ export async function GET(request: NextRequest) {
     "Cache-Control": "no-cache, no-store, must-revalidate",
     Pragma: "no-cache",
     Expires: "0",
+    "Content-Type": "image/png",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET",
   });
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -33,9 +36,9 @@ export async function GET(request: NextRequest) {
 
     console.log(fundraiserId, raised);
 
-    const imageURL = new URL("/rosalie.jpg", appURL).toString();
+    const imageURL = `${appURL}/rosalie.jpg`;
 
-    const convertedBase64Image = await imageToBase64(imageURL);
+    // const convertedBase64Image = await imageToBase64(imageURL);
 
     return new ImageResponse(
       (
@@ -223,7 +226,7 @@ export async function GET(request: NextRequest) {
               boxShadow:
                 "12px 12px 0px 0px rgba(0,0,0,0.3), 0 0 40px rgba(0,0,0,0.1)",
               position: "relative",
-              zIndex: 1,
+              zIndex: "1",
               overflow: "hidden",
             }}
           >
@@ -326,7 +329,12 @@ export async function GET(request: NextRequest) {
                   }}
                 >
                   <img
-                    src={convertedBase64Image || imageURL}
+                    // src={imageURL}
+                    src={`data:image/jpeg;base64,${await fetch(
+                      new URL("/rosalie.jpg", request.url),
+                    )
+                      .then((res) => res.arrayBuffer())
+                      .then((buf) => Buffer.from(buf).toString("base64"))}`}
                     alt="Rosalie"
                     style={{
                       width: "300px",
