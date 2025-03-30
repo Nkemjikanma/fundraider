@@ -1,7 +1,6 @@
 import { appURL } from "@/lib/constants";
 import { fundraisers } from "@/lib/constants";
 import { ImageResponse } from "@vercel/og";
-// import { unstable_cache } from "next/cache";
 import type { NextRequest } from "next/server";
 
 export const runtime = "edge";
@@ -45,28 +44,18 @@ export async function GET(request: NextRequest) {
               overflow: "hidden",
             }}
           >
-            <div
+            <img
+              // src={`${appURL}/fundraider_logo.webp`}
+              src="http://localhost:3000/og_fundraider.jpeg"
+              alt="Rosalie"
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "45%",
+                width: "700",
+                height: "700",
+                objectFit: "contain",
+                objectPosition: "top",
+                boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.2)",
               }}
-            >
-              <img
-                // src={`${appURL}/fundraider_logo.webp`}
-                src="http://localhost:3000/fundraider_logo.svg"
-                alt="Rosalie"
-                style={{
-                  width: "300",
-                  height: "300",
-                  objectFit: "contain",
-                  objectPosition: "top",
-                  border: "4px solid #000",
-                  boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.2)",
-                }}
-              />
-            </div>
+            />
           </div>
         ),
         {
