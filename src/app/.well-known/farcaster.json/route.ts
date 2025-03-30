@@ -1,5 +1,6 @@
 export async function GET() {
   const appURL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const thermometerImageURL = `${appURL}/api/generate-og`;
 
   const config = {
     accountAssociation: {
@@ -14,9 +15,9 @@ export async function GET() {
       name: "FundRaider",
       iconUrl: `${appURL}/fundraider_logo_padded.webp`,
       homeUrl: `${appURL}`,
-      imageUrl: `${appURL}/fundraider_logo_padded.webp`,
+      imageUrl: `${appURL}/api/generate-og`,
       buttonTitle: "Fund raid",
-      splashImageUrl: `${appURL}/fundraider_logo.webp`,
+      splashImageUrl: `${appURL}/api/generate-og`,
       splashBackgroundColor: "#D5C0A0",
       webhookUrl: `${appURL}/api/webhook`,
     },

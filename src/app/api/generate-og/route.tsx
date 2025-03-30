@@ -1,6 +1,5 @@
 import { appURL } from "@/lib/constants";
 import { fundraisers } from "@/lib/constants";
-import { imageToBase64 } from "@/lib/utils";
 import { ImageResponse } from "@vercel/og";
 // import { unstable_cache } from "next/cache";
 import type { NextRequest } from "next/server";
@@ -27,10 +26,54 @@ export async function GET(request: NextRequest) {
     const ml = searchParams.get("ml");
     const mr = searchParams.get("mr");
 
-    if (!fundraiserId || !raised) {
-      return new Response("Missing fundraiserId or raised", { status: 400 });
+    if (!fundraiserId && !raised && !imageURL) {
+      return new ImageResponse(
+        (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: "100%",
+              padding: "20px",
+              background: "#F0DEC2",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "45%",
+              }}
+            >
+              <img
+                // src={`${appURL}/fundraider_logo.webp`}
+                src="http://localhost:3000/fundraider_logo.svg"
+                alt="Rosalie"
+                style={{
+                  width: "280px",
+                  height: "300px",
+                  objectFit: "contain",
+                  objectPosition: "top",
+                  border: "4px solid #000",
+                  boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.2)",
+                }}
+              />
+            </div>
+          </div>
+        ),
+        {
+          width: 1200,
+          height: 800,
+          headers: headers,
+        },
+      );
     }
-
     const fundraiser = fundraisers.find((f) => f.id === fundraiserId);
 
     if (!fundraiser) {
@@ -255,7 +298,7 @@ export async function GET(request: NextRequest) {
                   textShadow: "4px 4px 0px #FFF",
                   letterSpacing: "1px",
                   lineHeight: "1.2",
-                  textAlign: "center", // Centered
+                  textAlign: "center",
                   marginBottom: "20px",
                 }}
               >

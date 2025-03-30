@@ -25,7 +25,7 @@ export async function generateMetadata({
     const { fundraiserId, raised, imageURL, mt, mb, ml, mr } =
       await searchParams;
 
-    const thermometerImageURL = `${appURL}/api/generate-thermometer?fundraiserId=${fundraiserId}&raised=${raised}&imageURL=${imageURL}&mt=${mt}&mb=${mb}&ml=${ml}&mr=${mr}&t=${timestamp}`;
+    const thermometerImageURL = `${appURL}/api/generate-og?fundraiserId=${fundraiserId}&raised=${raised}&imageURL=${imageURL}&mt=${mt}&mb=${mb}&ml=${ml}&mr=${mr}&t=${timestamp}`;
     console.log(thermometerImageURL);
     const frame = {
       version: "next",
