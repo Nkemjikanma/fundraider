@@ -56,8 +56,8 @@ export async function GET(request: NextRequest) {
                 src="http://localhost:3000/fundraider_logo.svg"
                 alt="Rosalie"
                 style={{
-                  width: "280px",
-                  height: "300px",
+                  width: "280",
+                  height: "300",
                   objectFit: "contain",
                   objectPosition: "top",
                   border: "4px solid #000",
