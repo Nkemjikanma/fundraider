@@ -15,6 +15,8 @@ export async function GET(request: NextRequest) {
     "Content-Type": "image/jpeg",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET",
+    "User-Agent":
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
   });
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -56,7 +58,7 @@ export async function GET(request: NextRequest) {
                 src="http://localhost:3000/fundraider_logo.svg"
                 alt="Rosalie"
                 style={{
-                  width: "280",
+                  width: "300",
                   height: "300",
                   objectFit: "contain",
                   objectPosition: "top",
