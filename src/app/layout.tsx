@@ -8,8 +8,8 @@ const appURL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
 const frame = {
   version: "next",
-  imageUrl: `${appURL}/api/generate-og`,
-  image: `${appURL}/api/generate-og`,
+  imageUrl: `${appURL}/og_fundraider.jpeg`,
+  image: `${appURL}/og_fundraider.jpeg`,
   button: {
     title: "Fund raid",
     action: {
@@ -32,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "Fundraider",
       description: "A V2 Frame for fundraising",
-      images: [{ url: `${appURL}/api/generate-og` }],
+      images: [{ url: `${appURL}/og_fundraider.jpeg` }],
       url: appURL,
       siteName: "Fundraider",
       locale: "en_US",
