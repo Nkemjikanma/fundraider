@@ -4,14 +4,14 @@ import { ImageResponse } from "@vercel/og";
 import type { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  // const headers = new Headers({
-  //   "Cache-Control": "no-cache, no-store, must-revalidate",
-  //   Pragma: "no-cache",
-  //   Expires: "0",
-  //   "Content-Type": "image/jpeg",
-  //   "Access-Control-Allow-Origin": "*",
-  //   "Access-Control-Allow-Methods": "GET",
-  // });
+  const headers = new Headers({
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    Pragma: "no-cache",
+    Expires: "0",
+    "Content-Type": "image/jpeg",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET",
+  });
   try {
     const searchParams = request.nextUrl.searchParams;
     const fundraiserId = searchParams.get("fundraiserId");
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
         {
           width: 1200,
           height: 800,
-          // headers: headers,
+          headers: headers,
         },
       );
     }
@@ -435,7 +435,7 @@ export async function GET(request: NextRequest) {
       {
         width: 1200,
         height: 800,
-        // headers: headers,
+        headers: headers,
       },
     );
   } catch (error: unknown) {
@@ -464,7 +464,7 @@ export async function GET(request: NextRequest) {
       {
         width: 1200,
         height: 800,
-        // headers: headers,
+        headers: headers,
       },
     );
   }
