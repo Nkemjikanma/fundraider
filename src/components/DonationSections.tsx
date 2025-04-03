@@ -81,9 +81,7 @@ export const DonationSection = ({
 							</code>
 						) : (
 							<Button
-								onClick={() =>
-									isConnected ? disconnect() : connect({ connector: config.connectors[0] })
-								}
+								onClick={() => (isConnected ? disconnect() : connect({ connector: config.connectors[0] }))}
 								variant="outline"
 								size="sm"
 							>
@@ -101,9 +99,7 @@ export const DonationSection = ({
 									key={amount}
 									variant="outline"
 									onClick={() => handleQuickDonateButtons(amount)}
-									className={`w-full rounded-none ${
-										!isConnected ? "opacity-50 cursor-not-allowed" : ""
-									}`}
+									className={`w-full rounded-none ${!isConnected ? "opacity-50 cursor-not-allowed" : ""}`}
 									disabled={!isConnected || !userAddress}
 								>
 									{amount} ETH
@@ -167,9 +163,7 @@ export const DonationSection = ({
 							</div>
 							<Button
 								onClick={handleDonateClick}
-								disabled={
-									!isConnected || !customAmount || isSendTxPending || Number(customAmount) <= 0
-								}
+								disabled={!isConnected || !customAmount || isSendTxPending || Number(customAmount) <= 0}
 								className="bg-teal-500 hover:bg-teal-600 rounded-none"
 							>
 								{isConnected ? "Donate" : "Connect Wallet"}

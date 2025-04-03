@@ -17,21 +17,13 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
 
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
 	return (
-		<div
-			data-slot="card-header"
-			className={cn("flex flex-col gap-1.5 px-6", className)}
-			{...props}
-		/>
+		<div data-slot="card-header" className={cn("flex flex-col gap-1.5 px-6", className)} {...props} />
 	);
 }
 
 function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
 	return (
-		<div
-			data-slot="card-title"
-			className={cn("leading-none font-semibold", className)}
-			{...props}
-		/>
+		<div data-slot="card-title" className={cn("leading-none font-semibold", className)} {...props} />
 	);
 }
 
