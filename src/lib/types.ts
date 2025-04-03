@@ -6,6 +6,7 @@ export type Fundraiser = {
     address: string;
     ensName?: string;
     farcaster?: string;
+    fid: number;
   };
   title: string;
   description: string;

@@ -51,7 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body className="antialiased bg-[#D5C0A0]">
         <PostHogProvider>
           <Providers>{children}</Providers>
         </PostHogProvider>

@@ -15,13 +15,15 @@ export default async function Home({
 
   console.log("params", fundraiser);
 
-  const isValidFundraiser = fundraisers.some((f) => f.id.toLowerCase() === fundraiser.toLowerCase());
+  const isValidFundraiser = fundraisers.some(
+    (f) => f.id.toLowerCase() === fundraiser.toLowerCase(),
+  );
 
   if (!isValidFundraiser) {
     notFound();
   }
   return (
-    <div className="w-full bg-[#D5C0A0] min-h-screen">
+    <div className="w-full bg-transparent min-h-screen">
       <ErrorBoundary fallback={<FundraiserError />}>
         <FundRaider param={fundraiser} />
       </ErrorBoundary>
