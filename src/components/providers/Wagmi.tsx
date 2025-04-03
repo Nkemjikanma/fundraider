@@ -5,23 +5,23 @@ import { http, WagmiProvider, createConfig, injected } from "wagmi";
 import { base, degen, zora } from "wagmi/chains";
 
 if (!alchemyApiKey) {
-	throw new Error("ALCHEMY_API_KEY is not defined");
+  throw new Error("ALCHEMY_API_KEY is not defined");
 }
 
 export const config = createConfig({
-	chains: [base],
-	transports: {
-		[base.id]: http(networkURL),
-	},
-	connectors: [farcasterFrame(), injected()],
+  chains: [base],
+  transports: {
+    [base.id]: http(networkURL),
+  },
+  connectors: [farcasterFrame(), injected()],
 });
 
 const queryClient = new QueryClient();
 
 export default function Provider({ children }: { children: React.ReactNode }) {
-	return (
-		<WagmiProvider config={config}>
-			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-		</WagmiProvider>
-	);
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </WagmiProvider>
+  );
 }
