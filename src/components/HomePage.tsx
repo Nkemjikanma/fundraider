@@ -2,7 +2,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { appURL } from "@/lib/constants";
 import { fundraisers } from "@/lib/constants";
 import { getWalletBalance } from "@/lib/services";
 import sdk, { type FrameNotificationDetails } from "@farcaster/frame-sdk";
