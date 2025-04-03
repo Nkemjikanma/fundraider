@@ -5,32 +5,48 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { appURL } from "@/lib/constants";
 import { fundraisers } from "@/lib/constants";
 import { getWalletBalance } from "@/lib/services";
-import sdk from "@farcaster/frame-sdk";
+import sdk, { type FrameNotificationDetails } from "@farcaster/frame-sdk";
 import { Clock, Share2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { formatEther } from "viem";
-import { Farcaster } from "./Icons/Farcaster";
+import { useCallback, useEffect, useState } from "react";
 import { SplashContainer } from "./SplashContainer";
 
 export default function HomePage() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const [raised, setRaised] = useState<string | undefined>("0");
   const [totalRaised, setTotalRaised] = useState<string>("0");
+
+  const [addFrameResult, setAddFrameResult] = useState("");
+  const [isAdded, setIsAdded] = useState(false);
+  const [notificationDetails, setNotificationDetails] =
+    useState<FrameNotificationDetails | null>(null);
   const router = useRouter();
 
   const fundraiser = fundraisers[0];
 
   useEffect(() => {
+    const addedCheck = async () => {
+      if ((await sdk.context)?.client.added) {
+        setIsAdded(true);
+      }
+    };
+
+    addedCheck();
+  }, []);
+
+  useEffect(() => {
     const load = async () => {
-      sdk.actions.ready();
+      await sdk.actions.ready();
     };
 
     if (sdk && !isSDKLoaded) {
       load();
       setIsSDKLoaded(true);
+      return () => {
+        sdk.removeAllListeners();
+      };
     }
   }, [isSDKLoaded]);
 
@@ -67,7 +83,37 @@ export default function HomePage() {
     fetchBalance();
   }, []);
 
-  console.log("Raised:", raised);
+  const addFrame = useCallback(async () => {
+    if ((await sdk.context).client.added || isAdded) {
+      return;
+    }
+
+    try {
+      const result = await sdk.actions.addFrame();
+
+      if (result.notificationDetails) {
+        setIsAdded(true);
+        await sendWelcomeNotification(result.notificationDetails);
+      }
+    } catch (e: unknown) {
+      if (
+        typeof e === "object" &&
+        e !== null &&
+        "reason" in e &&
+        (e.reason === "rejected_by_user" ||
+          e.reason === "invalid_domain_manifest")
+      ) {
+        console.log(`Frame add rejected: ${e.reason}`);
+      } else {
+        console.log("Unknown error", e);
+      }
+    }
+  }, [isAdded]);
+
+  const sendWelcomeNotification = async (
+    notificationDetails: FrameNotificationDetails,
+  ) => {};
+
   if (!isSDKLoaded) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-[#D5C0A0]">

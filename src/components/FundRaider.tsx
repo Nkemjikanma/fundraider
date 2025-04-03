@@ -323,18 +323,20 @@ export default function FundRaider({ param }: { param: string }) {
             <div className="flex flex-col relative justify-between bg-[#F0DEC2] border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3),0_0_40px_rgba(0,0,0,0.1)] h-full rounded-none p-3">
               <div className="flex flex-col relative">
                 <div className="w-full flex flex-row justify-between items-start">
-                  <div>
+                  <div className="relative flex flex-col items-start justify-start h-fit">
                     <h1 className="text-[16px] font-bold">
                       {fundraiser.title}
                     </h1>
-                    <p className="flex text-sm text-gray-500 w-full">
-                      <Link
-                        href={`https://warpcast.com/${fundraiser.fundraiserAddress.farcaster}`}
-                        className="flex items-center gap-2"
+                    <p className="relative flex text-sm text-gray-500 items-start justify-start px-0">
+                      <Button
+                        variant="link"
+                        // onClick={async () => await sdk.actions.viewProfile()}
+                        className="relative flex flex-row items-start justify-start text-left px-0"
+                        disabled
                       >
                         {fundraiser.fundraiserAddress.farcaster}
                         <ExternalLink className="w-3 h-3" />
-                      </Link>
+                      </Button>
                     </p>
                   </div>
 
@@ -346,7 +348,7 @@ export default function FundRaider({ param }: { param: string }) {
                     >
                       <Share2 className="w-5 h-5" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" disabled>
                       <EyeOff className="w-5 h-5" />
                     </Button>
                   </div>
