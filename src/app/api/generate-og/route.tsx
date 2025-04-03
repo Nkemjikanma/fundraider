@@ -3,7 +3,9 @@ import { fundraisers } from "@/lib/constants";
 import { ImageResponse } from "@vercel/og";
 import type { NextRequest } from "next/server";
 
-export const runtime = "edge";
+export const config = {
+  runtime: "edge",
+};
 
 export async function GET(request: NextRequest) {
   const headers = new Headers({
@@ -24,6 +26,9 @@ export async function GET(request: NextRequest) {
     const ml = searchParams.get("ml");
     const mr = searchParams.get("mr");
 
+    const bgImageUrl = new URL("/og_background.jpeg", appURL).toString();
+    const defaultImageUrl = new URL("/og_fundraider.jpeg", appURL).toString();
+
     if (!fundraiserId && !raised && !imageURL) {
       return new ImageResponse(
         (
@@ -42,11 +47,11 @@ export async function GET(request: NextRequest) {
             }}
           >
             <img
-              src="http://localhost:3000/og_fundraider.jpeg"
+              src={defaultImageUrl}
               alt="Rosalie"
               style={{
-                width: "700",
-                height: "700",
+                width: "700px",
+                height: "700px",
                 objectFit: "contain",
                 objectPosition: "top",
                 boxShadow: "4px 4px 0px 0px rgba(0,0,0,0.2)",
@@ -84,166 +89,23 @@ export async function GET(request: NextRequest) {
             padding: `${mt}px ${mr}px ${mb}px ${ml}px`,
             position: "relative",
             overflow: "hidden",
+            backgroundImage: `url(${bgImageUrl})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundColor: "#D5C0A0",
           }}
         >
-          {/* Large Vibrant Blobs */}
           <div
             style={{
               position: "absolute",
-              top: "-50px",
-              left: "-30px",
-              width: "300px",
-              height: "300px",
-              background: "#FF3366", // Bright pink
-              borderRadius: "60%",
-              transform: "rotate(-15deg)",
-              opacity: 0.5,
-              mixBlendMode: "multiply",
+              top: 0,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "8px",
+              height: "100%",
+              background: "#D5C0A0",
             }}
           />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "-40px",
-              right: "-20px",
-              width: "350px",
-              height: "350px",
-              background: "#00FFCC", // Bright turquoise
-              borderRadius: "70%",
-              transform: "rotate(25deg)",
-              opacity: 0.5,
-              mixBlendMode: "multiply",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "30%",
-              left: "70%",
-              width: "280px",
-              height: "280px",
-              background: "#FFD700", // Golden yellow
-              borderRadius: "50%",
-              transform: "rotate(45deg)",
-              opacity: 0.5,
-              mixBlendMode: "multiply",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "60%",
-              left: "-30px",
-              width: "320px",
-              height: "320px",
-              background: "#FF9933", // Bright orange
-              borderRadius: "65%",
-              transform: "rotate(-30deg)",
-              opacity: 0.5,
-              mixBlendMode: "multiply",
-            }}
-          />
-
-          {/* Medium Colorful Elements */}
-          {[...Array(4)].map((_, i) => (
-            <div
-              key={`medium-${i}`}
-              style={{
-                position: "absolute",
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                width: "150px",
-                height: "150px",
-                background: [
-                  "#FF0066", // Hot pink
-                  "#00FF99", // Bright green
-                  "#FF6600", // Orange
-                  "#33CCFF", // Sky blue
-                  "#FF99CC", // Light pink
-                  "#66FF33", // Lime green
-                  "#FF3366", // Rose
-                  "#00FFFF", // Cyan
-                ][i],
-                borderRadius: "50%",
-                opacity: 0.4,
-                mixBlendMode: "multiply",
-                transform: `rotate(${Math.random() * 360}deg)`,
-              }}
-            />
-          ))}
-
-          {/* Sparkles and Small Decorations */}
-          {[...Array(10)].map((_, i) => (
-            <div
-              key={`sparkle-${i}`}
-              style={{
-                position: "absolute",
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                width: "15px",
-                height: "15px",
-                background: [
-                  "#FFD700", // Gold
-                  "#FF1493", // Deep pink
-                  "#00FFFF", // Cyan
-                  "#FF4500", // Orange red
-                  "#7FFF00", // Chartreuse
-                ][i % 5],
-                clipPath:
-                  "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
-                opacity: 0.8,
-                transform: `rotate(${Math.random() * 360}deg) scale(${1 + Math.random()})`,
-              }}
-            />
-          ))}
-
-          {/* Pixel Art Elements */}
-          {[...Array(10)].map((_, i) => (
-            <div
-              key={`pixel-${i}`}
-              style={{
-                position: "absolute",
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                width: "12px",
-                height: "12px",
-                background: [
-                  "#FF0066", // Hot pink
-                  "#00FF99", // Bright green
-                  "#FFFF00", // Yellow
-                  "#FF99CC", // Light pink
-                  "#33CCFF", // Sky blue
-                ][i % 5],
-                boxShadow: "2px 2px 0px 0px rgba(0,0,0,0.2)",
-                opacity: 0.6,
-                transform: `rotate(${Math.random() * 45}deg)`,
-              }}
-            />
-          ))}
-
-          {/* Glowing Circles */}
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={`glow-${i}`}
-              style={{
-                position: "absolute",
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                width: "20px",
-                height: "20px",
-                background: "#FFF",
-                borderRadius: "50%",
-                opacity: 0.4,
-                boxShadow: [
-                  "0 0 10px #FF0066",
-                  "0 0 10px #00FF99",
-                  "0 0 10px #FFFF00",
-                  "0 0 10px #33CCFF",
-                  "0 0 10px #FF99CC",
-                ][i % 5],
-              }}
-            />
-          ))}
           <div
             style={{
               display: "flex",
