@@ -3,6 +3,8 @@ import { fundraisers } from "@/lib/constants";
 import { ImageResponse } from "@vercel/og";
 import type { NextRequest } from "next/server";
 
+export const runtime = "edge";
+
 export async function GET(request: NextRequest) {
   const headers = new Headers({
     "Cache-Control": "no-cache, no-store, must-revalidate",
