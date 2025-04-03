@@ -85,7 +85,9 @@ export default function HomePage() {
           variant="ghost"
           size="sm"
           className="mb-2 rounded-none"
-          onClick={addMiniApp}
+          onClick={() => {
+            addMiniApp();
+          }}
         >
           <PlusIcon />
           Add frame

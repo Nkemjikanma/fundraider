@@ -26,7 +26,7 @@ export type MiniAppContextType = {
   signInError: Error | undefined;
   addMiniApp: () => void;
   isValidFrameContext: boolean | null;
-  // lastEvent: string;
+  lastEvent: string;
   handleShare: (raised?: string, shareMessage?: string) => void;
 };
 
@@ -46,6 +46,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
     useState<MiniAppContextType["signInError"]>();
   const [isValidFrameContext, setIsValidFrameContext] =
     useState<MiniAppContextType["isValidFrameContext"]>(null);
+  const [lastEvent, setLastEvent] = useState("");
 
   const router = useRouter();
 
@@ -83,6 +84,35 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
 
         await sdk.actions.ready();
         setIsLoaded(true);
+
+        sdk.on("frameAdded", ({ notificationDetails }) => {
+          setLastEvent(
+            `frameAdded${!!notificationDetails ? ", notifications enabled" : ""}`,
+          );
+          setIsAdded(true);
+          if (notificationDetails) {
+            setNotificationDetails(notificationDetails);
+          }
+        });
+
+        sdk.on("frameAddRejected", ({ reason }) => {
+          setLastEvent(`frameAddRejected, reason ${reason}`);
+        });
+
+        sdk.on("frameRemoved", () => {
+          setLastEvent("frameRemoved");
+          setIsAdded(false);
+          setNotificationDetails(null);
+        });
+
+        sdk.on("notificationsEnabled", ({ notificationDetails }) => {
+          setLastEvent("notificationsEnabled");
+          setNotificationDetails(notificationDetails);
+        });
+        sdk.on("notificationsDisabled", () => {
+          setLastEvent("notificationsDisabled");
+          setNotificationDetails(null);
+        });
       } catch (error) {
         console.error("Failed to load context:", error);
         setIsValidFrameContext(false);
@@ -107,12 +137,15 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      sdk.actions.addFrame();
+      const result = await sdk.actions.addFrame();
+      console.log("addFrame result:", result);
 
-      // if (result.notificationDetails) {
-      //   setIsAdded(true);
-      //   await sendWelcomeNotification(result.notificationDetails);
-      // }
+      if (result.notificationDetails) {
+        setIsAdded(true);
+        if (result.notificationDetails) {
+          setNotificationDetails(result.notificationDetails);
+        }
+      }
     } catch (e: unknown) {
       if (
         typeof e === "object" &&
@@ -170,7 +203,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       isLoaded,
       isAdded,
       notificationDetails,
-      // lastEvent,
+      lastEvent,
       signInResult,
       signInError,
       isValidFrameContext,
@@ -182,7 +215,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       isLoaded,
       isAdded,
       notificationDetails,
-      // lastEvent,
+      lastEvent,
       signInResult,
       signInError,
       isValidFrameContext,
