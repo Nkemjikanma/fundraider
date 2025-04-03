@@ -16,17 +16,19 @@ type SharePageProps = {
   }>;
 };
 
-export async function generateMetadata({ searchParams }: SharePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: SharePageProps): Promise<Metadata> {
   try {
     const timestamp = Date.now();
 
-    const { fundraiserId, raised, imageURL, mt, mb, ml, mr } = await searchParams;
+    const { fundraiserId, raised, imageURL, mt, mb, ml, mr } =
+      await searchParams;
 
-    const thermometerImageURL = `${appURL}/api/generate-og?fundraiserId=${fundraiserId}&raised=${raised}&imageURL=${imageURL}&mt=${mt}&mb=${mb}&ml=${ml}&mr=${mr}&t=${timestamp}`;
-    console.log(thermometerImageURL);
+    const ogImageURl = `${appURL}/api/generate-og?fundraiserId=${fundraiserId}&raised=${raised}&imageURL=${imageURL}&mt=${mt}&mb=${mb}&ml=${ml}&mr=${mr}&t=${timestamp}`;
     const frame = {
       version: "next",
-      imageUrl: thermometerImageURL,
+      imageUrl: ogImageURl,
       button: {
         title: "Fund raid for rosalie",
         action: {

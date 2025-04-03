@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const SplashContainer = ({
   children,
@@ -8,13 +8,24 @@ export const SplashContainer = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const elementsRef = useRef(
-    [...Array(5)].map(() => ({
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      rotation: Math.random() * 360,
-    })),
-  );
+  const [elements, setElements] = useState<
+    Array<{
+      top: string;
+      left: string;
+      rotation: number;
+    }>
+  >([]);
+
+  useEffect(() => {
+    // Generate random values after initial render
+    setElements(
+      [...Array(5)].map(() => ({
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        rotation: Math.random() * 360,
+      })),
+    );
+  }, []);
   return (
     <div
       className={`relative min-h-screen min-w-96 overflow-hidden ${className}`}
@@ -67,7 +78,7 @@ export const SplashContainer = ({
       />
 
       {/* Random position elements */}
-      {elementsRef.current.map((elem, i) => (
+      {elements.map((elem, i) => (
         <div
           key={`medium-${i}`}
           className="absolute rounded-full opacity-40 mix-blend-multiply"

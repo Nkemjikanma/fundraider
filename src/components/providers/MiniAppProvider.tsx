@@ -15,7 +15,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { SafeArea } from "../SafeArea";
 
 export type MiniAppContextType = {
   context: Context.FrameContext | undefined;
@@ -233,9 +232,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <MiniAppContext.Provider value={value}>
-      <SafeArea>{children}</SafeArea>
-    </MiniAppContext.Provider>
+    <MiniAppContext.Provider value={value}>{children}</MiniAppContext.Provider>
   );
 }
 

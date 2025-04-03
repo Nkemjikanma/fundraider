@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { Switch } from "./ui/switch";
 
 interface DonationSectionProps {
   isConnected: boolean;
@@ -105,6 +106,8 @@ export const DonationSection = ({
           {/* Fixed Amount Buttons */}
           <div className="space-y-2">
             <Label>Quick Donate</Label>
+            {/* <Switch onCheckedChange={} /> */}
+
             <div className="grid grid-cols-3 gap-2">
               {FIXED_AMOUNTS.map((amount) => (
                 <Button
