@@ -7,10 +7,7 @@ export async function GET(request: Request) {
   const tokenAddress = searchParams.get("tokenAddress");
 
   if (!address || !tokenAddress) {
-    return NextResponse.json(
-      { error: "Missing address or token parameter" },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "Missing address or token parameter" }, { status: 400 });
   }
 
   try {
@@ -19,9 +16,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ balance: balance?.balance }, { status: 200 });
   } catch (error) {
     console.error("Error fetching token balance:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch token balance" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to fetch token balance" }, { status: 500 });
   }
 }

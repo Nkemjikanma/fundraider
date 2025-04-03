@@ -19,9 +19,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ transfers }, { status: 200 });
   } catch (error) {
     console.error("Error fetching transfers:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch transfers" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to fetch transfers" }, { status: 500 });
   }
 }

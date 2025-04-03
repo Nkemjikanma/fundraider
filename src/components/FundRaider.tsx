@@ -109,9 +109,7 @@ export default function FundRaider({ param }: { param: string }) {
           chainId: base.id,
         });
 
-        const formattedBalance = Number(
-          formatUnits(ownerTokensWagmi.value, ownerTokensWagmi.decimals),
-        );
+        const formattedBalance = Number(formatUnits(ownerTokensWagmi.value, ownerTokensWagmi.decimals));
 
         if (Number(formattedBalance) > Number(customAmount)) {
           setCustomAmount(Number(amount).toFixed(4).toString());
@@ -171,26 +169,20 @@ export default function FundRaider({ param }: { param: string }) {
     console.log("share url here", url);
 
     console.log(
-      `https://warpcast.com/~/compose?text=${encodeURIComponent(
-        message,
-      )}&embeds[]=${encodeURIComponent(url)}`,
+      `https://warpcast.com/~/compose?text=${encodeURIComponent(message)}&embeds[]=${encodeURIComponent(url)}`,
     );
 
     if (!(await sdk.context)?.user) {
       console.log("here");
       router.push(
-        `https://warpcast.com/~/compose?text=${encodeURIComponent(
-          message,
-        )}&embeds[]=${encodeURIComponent(url)}`,
+        `https://warpcast.com/~/compose?text=${encodeURIComponent(message)}&embeds[]=${encodeURIComponent(url)}`,
       );
       return;
     }
 
     console.log("there");
     sdk.actions.openUrl(
-      `https://warpcast.com/~/compose?text=${encodeURIComponent(
-        message,
-      )}&embeds[]=${encodeURIComponent(url)}`,
+      `https://warpcast.com/~/compose?text=${encodeURIComponent(message)}&embeds[]=${encodeURIComponent(url)}`,
     );
   };
 
@@ -266,14 +258,8 @@ export default function FundRaider({ param }: { param: string }) {
     return (
       <div className="p-4 bg-red-50 rounded-lg">
         <h2 className="text-red-600 font-bold">Error loading data</h2>
-        <p className="text-red-500">
-          {balanceError?.message || transactionsError?.message}
-        </p>
-        <Button
-          onClick={() => window.location.reload()}
-          className="mt-2"
-          variant="destructive"
-        >
+        <p className="text-red-500">{balanceError?.message || transactionsError?.message}</p>
+        <Button onClick={() => window.location.reload()} className="mt-2" variant="destructive">
           Retry
         </Button>
       </div>
@@ -284,17 +270,9 @@ export default function FundRaider({ param }: { param: string }) {
     <div className="min-h-screen flex flex-col relative items-center max-w-md min-w-96 mx-auto p-4 bg-[#D5C0A0] overflow-hidden">
       {/* Large Vibrant Blobs */}
       <SplashContainer>
-        <Image
-          src="/fundraider_logo.webp"
-          width={200}
-          height={200}
-          alt="Fundraiser Logo"
-        />
+        <Image src="/fundraider_logo.webp" width={200} height={200} alt="Fundraiser Logo" />
         <div className="mb-4 mt-3">
-          <Badge
-            variant="secondary"
-            className="rounded-none bg-black/80 text-white px-4 py-2"
-          >
+          <Badge variant="secondary" className="rounded-none bg-black/80 text-white px-4 py-2">
             🚧 Beta - Currently focusing on Rosalie's Campaign
           </Badge>
         </div>
@@ -323,40 +301,32 @@ export default function FundRaider({ param }: { param: string }) {
             <div className="flex flex-col relative justify-between bg-[#F0DEC2] border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.3),0_0_40px_rgba(0,0,0,0.1)] h-full rounded-none p-3">
               <div className="flex flex-col relative">
                 <div className="w-full flex flex-row justify-between items-start">
-                  <div>
-                    <h1 className="text-[16px] font-bold">
-                      {fundraiser.title}
-                    </h1>
-                    <p className="flex text-sm text-gray-500 w-full">
-                      <Link
-                        href={`https://warpcast.com/${fundraiser.fundraiserAddress.farcaster}`}
-                        className="flex items-center gap-2"
+                  <div className="relative flex flex-col items-start justify-start h-fit">
+                    <h1 className="text-[16px] font-bold">{fundraiser.title}</h1>
+                    <p className="relative flex text-sm text-gray-500 items-start justify-start px-0">
+                      <Button
+                        variant="link"
+                        // onClick={async () => await sdk.actions.viewProfile()}
+                        className="relative flex flex-row items-start justify-start text-left px-0"
+                        disabled
                       >
                         {fundraiser.fundraiserAddress.farcaster}
                         <ExternalLink className="w-3 h-3" />
-                      </Link>
+                      </Button>
                     </p>
                   </div>
 
                   <div className="flex items-center gap-2 h-fit">
-                    <Button
-                      onClick={() => handleShare()}
-                      variant="ghost"
-                      size="icon"
-                    >
+                    <Button onClick={() => handleShare()} variant="ghost" size="icon">
                       <Share2 className="w-5 h-5" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" disabled>
                       <EyeOff className="w-5 h-5" />
                     </Button>
                   </div>
                 </div>
-                <div className="text-md font-bold text-teal-600 mt-3">
-                  {Number(raised).toFixed(4)} ETH
-                </div>
-                <div className="text-sm text-gray-600">
-                  raised of {fundraiser.goal.toFixed(4)} ETH goal
-                </div>
+                <div className="text-md font-bold text-teal-600 mt-3">{Number(raised).toFixed(4)} ETH</div>
+                <div className="text-sm text-gray-600">raised of {fundraiser.goal.toFixed(4)} ETH goal</div>
                 <div className="mt-4 flex items-center gap-2 mb-6">
                   <Clock className="w-4 h-4 text-gray-500" />
                   <span className="text-xs text-gray-500">
@@ -417,13 +387,12 @@ export default function FundRaider({ param }: { param: string }) {
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">About Rosalie</h2>
                 <p className="text-gray-600 mb-4">
-                  Rosalie is a 9-year old girl living with Rett syndrome. She is
-                  unable to walk or stand unaided and has limited use of her
-                  hands.
+                  Rosalie is a 9-year old girl living with Rett syndrome. She is unable to walk or stand unaided and has
+                  limited use of her hands.
                 </p>
                 <p className="text-gray-600 mb-6">
-                  Funds will go towards buying Rosalie a hiking cart, allowing
-                  her to experience the outdoors with her family.
+                  Funds will go towards buying Rosalie a hiking cart, allowing her to experience the outdoors with her
+                  family.
                 </p>
 
                 <div className="bg-gray-50 rounded-lg p-4">
@@ -432,17 +401,13 @@ export default function FundRaider({ param }: { param: string }) {
                     {fundraiser.fundraiserAddress.ensName ? (
                       <>
                         {" "}
-                        <code className="text-sm bg-white p-1 rounded">
-                          {fundraiser.fundraiserAddress.ensName}
-                        </code>
+                        <code className="text-sm bg-white p-1 rounded">{fundraiser.fundraiserAddress.ensName}</code>
                         <Link href={fundraiser.fundraiserAddress.ensName}>
                           <ExternalLink className="w-4 h-4" />
                         </Link>
                       </>
                     ) : (
-                      <code className="text-sm bg-white px-2 py-1 rounded">
-                        {fundraiser.fundraiserAddress.address}
-                      </code>
+                      <code className="text-sm bg-white px-2 py-1 rounded">{fundraiser.fundraiserAddress.address}</code>
                     )}
                   </div>
                 </div>

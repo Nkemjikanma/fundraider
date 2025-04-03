@@ -1,9 +1,6 @@
 "use client";
 
-import type {
-  AssetTransfersResult,
-  AssetTransfersWithMetadataResult,
-} from "alchemy-sdk";
+import type { AssetTransfersResult, AssetTransfersWithMetadataResult } from "alchemy-sdk";
 import { formatDistanceToNow } from "date-fns";
 import { motion } from "framer-motion";
 

@@ -24,9 +24,7 @@ export const TransactionFlow = ({
   linkToBaseScan,
   onClose,
 }: TransactionFlowProps) => {
-  const [step, setStep] = useState<
-    "preview" | "confirming" | "error" | "complete"
-  >("preview");
+  const [step, setStep] = useState<"preview" | "confirming" | "error" | "complete">("preview");
   const [error, setError] = useState<string>();
 
   const handleConfirm = async () => {
@@ -68,11 +66,7 @@ export const TransactionFlow = ({
             </p>
             <p>To: {fundraisers[0].fundraiserAddress.ensName}</p>
           </div>
-          <Button
-            type="button"
-            onClick={handleConfirm}
-            className="bg-teal-500 hover:bg-teal-600 rounded-none mt-2"
-          >
+          <Button type="button" onClick={handleConfirm} className="bg-teal-500 hover:bg-teal-600 rounded-none mt-2">
             Confirm
           </Button>
         </div>
@@ -102,11 +96,7 @@ export const TransactionFlow = ({
           <div className="mt-2 p-2 bg-red-50 text-red-600 rounded">
             Something went wrong. Please click button to try again.
           </div>
-          <Button
-            type="button"
-            onClick={() => setStep("preview")}
-            className="mt-2 w-full"
-          >
+          <Button type="button" onClick={() => setStep("preview")} className="mt-2 w-full">
             Try Again
           </Button>
         </div>

@@ -13,13 +13,13 @@ export async function GET() {
     frame: {
       version: "1",
       name: "FundRaider",
-      iconUrl: `${appURL}/fundraider_logo_padded.webp`,
-      homeUrl: `${appURL}`,
-      imageUrl: `${appURL}/og_fundraider.jpeg`,
+      iconUrl: "https://fundraider.xyz/og_fundraider.jpeg",
+      homeUrl: "https://fundraider.xyz",
+      imageUrl: "https://fundraider.xyz/og_fundraider.jpeg",
       buttonTitle: "Fund raid",
-      splashImageUrl: `${appURL}/og_fundraider.jpeg`,
+      splashImageUrl: "https://fundraider.xyz/fundraider_logo.webp",
       splashBackgroundColor: "#D5C0A0",
-      webhookUrl: `${appURL}/api/webhook`,
+      webhookUrl: "https://fundraider.xyz/api/webhook",
     },
   };
 
@@ -27,22 +27,20 @@ export async function GET() {
 }
 
 // {
-// 	("accountAssociation");
-// 	:
-// 	("header");
-// 	: "eyJmaWQiOjQwNTk0MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweEQxYTQxODBmN0Y5MmE3YjM5YjFlRUNDN0Q2MUU1NzNFOTY1QTVjRmMifQ",
+//   "accountAssociation": {
+//     "header": "eyJmaWQiOjQwNTk0MSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweEQxYTQxODBmN0Y5MmE3YjM5YjFlRUNDN0Q2MUU1NzNFOTY1QTVjRmMifQ",
 //     "payload": "eyJkb21haW4iOiJ3d3cuZnVuZHJhaWRlci54eXoifQ",
 //     "signature": "MHhhMmIxNTZlZjJhNjcxMzJkNjI4N2NmY2ZlZDE0ODk2MDE0ZTQ0NzEzN2E5ZTUyYWU3ZjYyZjA2M2Y2ODU3ZTYzN2NkMzFkNDI4NzhhYWU0YmZiN2FiZjRhOWYxNzljOWViZjU3NjFiNmMzNjhmZWJjNjFiODZlMjliMTBlODIxZjFj"
-// 	,
-//   "frame":
-// 	("version");
-// 	: "1",
-//     "name": "Example Frame",
-//     "iconUrl": "https://www.fundraider.xyz/icon.png",
-//     "homeUrl": "https://www.fundraider.xyz",
-//     "imageUrl": "https://www.fundraider.xyz/image.png",
-//     "buttonTitle": "Check this out",
-//     "splashImageUrl": "https://www.fundraider.xyz/splash.png",
-//     "splashBackgroundColor": "#eeccff",
-//     "webhookUrl": "https://www.fundraider.xyz/api/webhook"
+//   },
+//   "frame": {
+//     "version": "1",
+//     "name": "FundRaider",
+//     "iconUrl": "https://fundraider.xyz/og_fundraider.jpeg",
+//     "homeUrl": "https://fundraider.xyz",
+//     "imageUrl": "https://fundraider.xyz/og_fundraider.jpeg",
+//     "buttonTitle": "Fund raid",
+//     "splashImageUrl": "https://fundraider.xyz/fundraider_logo.webp",
+//     "splashBackgroundColor": "#D5C0A0",
+//     "webhookUrl": "https://fundraider.xyz/api/webhook"
+//   }
 // }

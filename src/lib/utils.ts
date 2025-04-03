@@ -16,10 +16,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const getAlchemyTokenBalance = async (
-  address: string,
-  token: string,
-) => {
+export const getAlchemyTokenBalance = async (address: string, token: string) => {
   const ownerTokens = await alchemy.core.getTokensForOwner(address);
 
   const ownerTokensTest = await alchemy.core.getTokenBalances(address, {
@@ -29,10 +26,7 @@ export const getAlchemyTokenBalance = async (
   const filteredToken = ownerTokens.tokens.find((ownerToken) => {
     console.log(ownerToken.symbol);
 
-    return (
-      ownerToken.symbol?.toLowerCase() === token.toLowerCase() ||
-      ownerToken.symbol === "WETH"
-    );
+    return ownerToken.symbol?.toLowerCase() === token.toLowerCase() || ownerToken.symbol === "WETH";
   });
 
   if (!filteredToken) {
@@ -62,19 +56,14 @@ export const getAlchemyTransfers = async (address: string) => {
         fromBlock: "0x0",
         toAddress: address,
         excludeZeroValue: true,
-        category: [
-          AssetTransfersCategory.ERC20,
-          AssetTransfersCategory.EXTERNAL,
-        ],
+        category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.EXTERNAL],
         withMetadata: true,
         order: SortingOrder.DESCENDING,
       })
       .then((transfer) =>
         transfer.transfers.filter((transfer, index) => {
           if (transfer.asset) {
-            return ["eth", "usdc", "degen"].includes(
-              transfer.asset.toLowerCase(),
-            );
+            return ["eth", "usdc", "degen"].includes(transfer.asset.toLowerCase());
           }
           return false;
         }),

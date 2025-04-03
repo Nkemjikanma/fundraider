@@ -74,24 +74,15 @@ export const SplashContainer = ({
             left: elem.left,
             width: "150px",
             height: "150px",
-            backgroundColor: [
-              "#FF0066",
-              "#00FF99",
-              "#FF6600",
-              "#33CCFF",
-              "#FF99CC",
-              "#66FF33",
-              "#FF3366",
-              "#00FFFF",
-            ][i % 8],
+            backgroundColor: ["#FF0066", "#00FF99", "#FF6600", "#33CCFF", "#FF99CC", "#66FF33", "#FF3366", "#00FFFF"][
+              i % 8
+            ],
             transform: `rotate(${elem.rotation}deg)`,
           }}
         />
       ))}
 
-      <div className="relative flex flex-col items-center justify-center z-10">
-        {children}
-      </div>
+      <div className="relative flex flex-col items-center justify-center z-10">{children}</div>
     </div>
   );
 };

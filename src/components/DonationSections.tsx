@@ -9,13 +9,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 interface DonationSectionProps {
   isConnected: boolean;
@@ -87,11 +81,7 @@ export const DonationSection = ({
               </code>
             ) : (
               <Button
-                onClick={() =>
-                  isConnected
-                    ? disconnect()
-                    : connect({ connector: config.connectors[0] })
-                }
+                onClick={() => (isConnected ? disconnect() : connect({ connector: config.connectors[0] }))}
                 variant="outline"
                 size="sm"
               >
@@ -109,9 +99,7 @@ export const DonationSection = ({
                   key={amount}
                   variant="outline"
                   onClick={() => handleQuickDonateButtons(amount)}
-                  className={`w-full rounded-none ${
-                    !isConnected ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  className={`w-full rounded-none ${!isConnected ? "opacity-50 cursor-not-allowed" : ""}`}
                   disabled={!isConnected || !userAddress}
                 >
                   {amount} ETH
@@ -134,29 +122,19 @@ export const DonationSection = ({
                   <Select
                     value={selectedToken.symbol}
                     onValueChange={(value) => {
-                      setSelectedToken(
-                        TOKENS.find((token) => token.symbol === value) ??
-                          TOKENS[0],
-                      );
+                      setSelectedToken(TOKENS.find((token) => token.symbol === value) ?? TOKENS[0]);
                       setCustomAmount("0.0");
                     }}
                     defaultValue={TOKENS[0].symbol}
                   >
                     <SelectTrigger className="w-[100px] absolute left-0 z-10 rounded-none">
-                      <SelectValue
-                        placeholder="Token"
-                        defaultValue={TOKENS[0].symbol}
-                      />
+                      <SelectValue placeholder="Token" defaultValue={TOKENS[0].symbol} />
                     </SelectTrigger>
                     <SelectContent>
                       {TOKENS.map((token) => (
                         <SelectItem key={token.symbol} value={token.symbol}>
                           <div className="flex items-center gap-2">
-                            <img
-                              src={token.image}
-                              alt={token.symbol}
-                              className="w-4 h-4"
-                            />
+                            <img src={token.image} alt={token.symbol} className="w-4 h-4" />
                             {token.symbol}
                           </div>
                         </SelectItem>
@@ -175,12 +153,7 @@ export const DonationSection = ({
                         inputRef?.current?.blur();
                       }
 
-                      if (
-                        e.key === "Enter" &&
-                        isConnected &&
-                        customAmount &&
-                        !isSendTxPending
-                      ) {
+                      if (e.key === "Enter" && isConnected && customAmount && !isSendTxPending) {
                         handleDonateClick();
                       }
                     }}
@@ -190,12 +163,7 @@ export const DonationSection = ({
               </div>
               <Button
                 onClick={handleDonateClick}
-                disabled={
-                  !isConnected ||
-                  !customAmount ||
-                  isSendTxPending ||
-                  Number(customAmount) <= 0
-                }
+                disabled={!isConnected || !customAmount || isSendTxPending || Number(customAmount) <= 0}
                 className="bg-teal-500 hover:bg-teal-600 rounded-none"
               >
                 {isConnected ? "Donate" : "Connect Wallet"}
@@ -230,19 +198,11 @@ export const DonationSection = ({
 
         {/* // Transaction status */}
         <div>
-          {isConfirming && (
-            <div className="text-orange-500 text-center mt-4">
-              ⏳ Waiting for confirmation...
-            </div>
-          )}
+          {isConfirming && <div className="text-orange-500 text-center mt-4">⏳ Waiting for confirmation...</div>}
 
           {isConfirmed && (
             <div className="relative w-fit flex flex-col items-center justify-center">
-              <Button
-                variant="link"
-                className="text-green-500 text-center mt-4"
-                onClick={() => linkToBaseScan()}
-              >
+              <Button variant="link" className="text-green-500 text-center mt-4" onClick={() => linkToBaseScan()}>
                 <p>🎉 Transaction Confirmed!</p>
                 <p>Tap to View on Basescan</p>
               </Button>
