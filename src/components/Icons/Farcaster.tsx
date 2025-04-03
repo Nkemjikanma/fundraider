@@ -1,11 +1,5 @@
 export const Farcaster = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="-9 -10 50 50"
-    className="ml-1"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="-9 -10 50 50" className="ml-1">
     <rect width="50" height="50" x="-9" y="-10" fill="#855DCD" rx="12" />
     <path
       fill="#FFF"

@@ -15,9 +15,7 @@ export default async function Home({
 
   console.log("params", fundraiser);
 
-  const isValidFundraiser = fundraisers.some(
-    (f) => f.id.toLowerCase() === fundraiser.toLowerCase(),
-  );
+  const isValidFundraiser = fundraisers.some((f) => f.id.toLowerCase() === fundraiser.toLowerCase());
 
   if (!isValidFundraiser) {
     notFound();

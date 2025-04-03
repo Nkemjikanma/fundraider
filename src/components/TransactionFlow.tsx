@@ -66,11 +66,7 @@ export const TransactionFlow = ({
             </p>
             <p>To: {fundraisers[0].fundraiserAddress.ensName}</p>
           </div>
-          <Button
-            type="button"
-            onClick={handleConfirm}
-            className="bg-teal-500 hover:bg-teal-600 rounded-none mt-2"
-          >
+          <Button type="button" onClick={handleConfirm} className="bg-teal-500 hover:bg-teal-600 rounded-none mt-2">
             Confirm
           </Button>
         </div>

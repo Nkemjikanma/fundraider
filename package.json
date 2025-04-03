@@ -6,9 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "biome-lint": "biome check .",
-    "format-and-lint:fix": "biome check . --write"
+    "lint": "biome check .",
+    "lint:fix": "biome check . --write"
   },
   "dependencies": {
     "@farcaster/frame-sdk": "^0.0.32",
@@ -37,7 +36,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "1.9.4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^22.13.9",
     "@types/react": "^19",

@@ -47,15 +47,7 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
     const width = i % 5 === 0 ? 10 : 5;
 
     return (
-      <line
-        key={i}
-        x1={35 - width}
-        y1={y}
-        x2={45 + width}
-        y2={y}
-        stroke="#333"
-        strokeWidth={i % 5 === 0 ? 2 : 1}
-      />
+      <line key={i} x1={35 - width} y1={y} x2={45 + width} y2={y} stroke="#333" strokeWidth={i % 5 === 0 ? 2 : 1} />
     );
   });
 
@@ -127,16 +119,7 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
           <rect x="0" y="0" width="100" height="260" fill="transparent" />
 
           {/* Thermometer tube background */}
-          <rect
-            x="31"
-            y="40"
-            width="18"
-            height="220"
-            rx="8"
-            fill="#f0f0f0"
-            stroke="#333"
-            strokeWidth="2"
-          />
+          <rect x="31" y="40" width="18" height="220" rx="8" fill="#f0f0f0" stroke="#333" strokeWidth="2" />
 
           {/* Measurement lines */}
           {measurementLines}
@@ -164,12 +147,7 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
           <circle cx="40" cy="260" r="20" fill="#f0f0f0" stroke="#333" strokeWidth="2" />
 
           {/* Mercury in bulb */}
-          <circle
-            cx="40"
-            cy="260"
-            r="19"
-            fill={mercuryHeight > 0 ? "url(#mercuryGradientBulb)" : "#f0f0f0"}
-          />
+          <circle cx="40" cy="260" r="19" fill={mercuryHeight > 0 ? "url(#mercuryGradientBulb)" : "#f0f0f0"} />
 
           {/* Bubbles */}
           {bubbles}

@@ -20,9 +20,7 @@ export default function HomePage() {
 
   const [addFrameResult, setAddFrameResult] = useState("");
   const [isAdded, setIsAdded] = useState(false);
-  const [notificationDetails, setNotificationDetails] = useState<FrameNotificationDetails | null>(
-    null,
-  );
+  const [notificationDetails, setNotificationDetails] = useState<FrameNotificationDetails | null>(null);
   const router = useRouter();
 
   const fundraiser = fundraisers[0];
@@ -136,17 +134,13 @@ export default function HomePage() {
     if (!(await sdk.context)?.user) {
       console.log("here");
       router.push(
-        `https://warpcast.com/~/compose?text=${encodeURIComponent(
-          message,
-        )}&embeds[]=${encodeURIComponent(url)}`,
+        `https://warpcast.com/~/compose?text=${encodeURIComponent(message)}&embeds[]=${encodeURIComponent(url)}`,
       );
       return;
     }
 
     sdk.actions.openUrl(
-      `https://warpcast.com/~/compose?text=${encodeURIComponent(
-        message,
-      )}&embeds[]=${encodeURIComponent(url)}`,
+      `https://warpcast.com/~/compose?text=${encodeURIComponent(message)}&embeds[]=${encodeURIComponent(url)}`,
     );
   };
 
@@ -157,10 +151,7 @@ export default function HomePage() {
 
         {/* Beta Badge */}
         <div className="relative flex w-full justify-center mt-6 mb-8">
-          <Badge
-            variant="secondary"
-            className="rounded-none bg-black/80 text-white px-4 py-2 border-1 border-white"
-          >
+          <Badge variant="secondary" className="rounded-none bg-black/80 text-white px-4 py-2 border-1 border-white">
             🚧 Beta - Currently focusing on Rosalie's Campaign
           </Badge>
         </div>
@@ -213,16 +204,12 @@ export default function HomePage() {
 
                   <div className="flex gap-2 mb-2 w-full items-start">
                     <Clock className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-500">
-                      {new Date(fundraiser.endDate).toDateString()}
-                    </span>
+                    <span className="text-sm text-gray-500">{new Date(fundraiser.endDate).toDateString()}</span>
                   </div>
 
                   <div className="flex flex-row w-full justify-between mt-2">
                     <div className="flex w-full justify-between items-center">
-                      <span className="text-sm font-medium">
-                        {Number(raised).toFixed(4)} ETH raised
-                      </span>
+                      <span className="text-sm font-medium">{Number(raised).toFixed(4)} ETH raised</span>
                       <span className="text-sm text-gray-500">Goal: {fundraiser.goal} ETH</span>
                     </div>
                   </div>
@@ -235,9 +222,7 @@ export default function HomePage() {
                     />
                   </div>
 
-                  <div className="group mt-4 w-1/2 group-hover:underline text-center">
-                    View Details
-                  </div>
+                  <div className="group mt-4 w-1/2 group-hover:underline text-center">View Details</div>
                 </CardContent>
               </Card>
             </Link>

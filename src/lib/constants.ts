@@ -36,8 +36,7 @@ export const TOKENS: Token[] = [
   {
     symbol: "DEGEN",
     name: "Degen",
-    image:
-      "https://assets.coingecko.com/coins/images/34515/standard/android-chrome-512x512.png?1706198225",
+    image: "https://assets.coingecko.com/coins/images/34515/standard/android-chrome-512x512.png?1706198225",
     address: "0x4ed4e862860bed51a9570b96d89af5e1b0efefed",
     decimals: 18,
   },

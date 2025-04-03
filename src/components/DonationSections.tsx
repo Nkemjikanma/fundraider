@@ -81,9 +81,7 @@ export const DonationSection = ({
               </code>
             ) : (
               <Button
-                onClick={() =>
-                  isConnected ? disconnect() : connect({ connector: config.connectors[0] })
-                }
+                onClick={() => (isConnected ? disconnect() : connect({ connector: config.connectors[0] }))}
                 variant="outline"
                 size="sm"
               >
@@ -165,9 +163,7 @@ export const DonationSection = ({
               </div>
               <Button
                 onClick={handleDonateClick}
-                disabled={
-                  !isConnected || !customAmount || isSendTxPending || Number(customAmount) <= 0
-                }
+                disabled={!isConnected || !customAmount || isSendTxPending || Number(customAmount) <= 0}
                 className="bg-teal-500 hover:bg-teal-600 rounded-none"
               >
                 {isConnected ? "Donate" : "Connect Wallet"}
@@ -202,17 +198,11 @@ export const DonationSection = ({
 
         {/* // Transaction status */}
         <div>
-          {isConfirming && (
-            <div className="text-orange-500 text-center mt-4">⏳ Waiting for confirmation...</div>
-          )}
+          {isConfirming && <div className="text-orange-500 text-center mt-4">⏳ Waiting for confirmation...</div>}
 
           {isConfirmed && (
             <div className="relative w-fit flex flex-col items-center justify-center">
-              <Button
-                variant="link"
-                className="text-green-500 text-center mt-4"
-                onClick={() => linkToBaseScan()}
-              >
+              <Button variant="link" className="text-green-500 text-center mt-4" onClick={() => linkToBaseScan()}>
                 <p>🎉 Transaction Confirmed!</p>
                 <p>Tap to View on Basescan</p>
               </Button>

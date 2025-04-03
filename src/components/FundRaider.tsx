@@ -109,9 +109,7 @@ export default function FundRaider({ param }: { param: string }) {
           chainId: base.id,
         });
 
-        const formattedBalance = Number(
-          formatUnits(ownerTokensWagmi.value, ownerTokensWagmi.decimals),
-        );
+        const formattedBalance = Number(formatUnits(ownerTokensWagmi.value, ownerTokensWagmi.decimals));
 
         if (Number(formattedBalance) > Number(customAmount)) {
           setCustomAmount(Number(amount).toFixed(4).toString());
@@ -171,26 +169,20 @@ export default function FundRaider({ param }: { param: string }) {
     console.log("share url here", url);
 
     console.log(
-      `https://warpcast.com/~/compose?text=${encodeURIComponent(
-        message,
-      )}&embeds[]=${encodeURIComponent(url)}`,
+      `https://warpcast.com/~/compose?text=${encodeURIComponent(message)}&embeds[]=${encodeURIComponent(url)}`,
     );
 
     if (!(await sdk.context)?.user) {
       console.log("here");
       router.push(
-        `https://warpcast.com/~/compose?text=${encodeURIComponent(
-          message,
-        )}&embeds[]=${encodeURIComponent(url)}`,
+        `https://warpcast.com/~/compose?text=${encodeURIComponent(message)}&embeds[]=${encodeURIComponent(url)}`,
       );
       return;
     }
 
     console.log("there");
     sdk.actions.openUrl(
-      `https://warpcast.com/~/compose?text=${encodeURIComponent(
-        message,
-      )}&embeds[]=${encodeURIComponent(url)}`,
+      `https://warpcast.com/~/compose?text=${encodeURIComponent(message)}&embeds[]=${encodeURIComponent(url)}`,
     );
   };
 
@@ -333,12 +325,8 @@ export default function FundRaider({ param }: { param: string }) {
                     </Button>
                   </div>
                 </div>
-                <div className="text-md font-bold text-teal-600 mt-3">
-                  {Number(raised).toFixed(4)} ETH
-                </div>
-                <div className="text-sm text-gray-600">
-                  raised of {fundraiser.goal.toFixed(4)} ETH goal
-                </div>
+                <div className="text-md font-bold text-teal-600 mt-3">{Number(raised).toFixed(4)} ETH</div>
+                <div className="text-sm text-gray-600">raised of {fundraiser.goal.toFixed(4)} ETH goal</div>
                 <div className="mt-4 flex items-center gap-2 mb-6">
                   <Clock className="w-4 h-4 text-gray-500" />
                   <span className="text-xs text-gray-500">
@@ -399,12 +387,12 @@ export default function FundRaider({ param }: { param: string }) {
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">About Rosalie</h2>
                 <p className="text-gray-600 mb-4">
-                  Rosalie is a 9-year old girl living with Rett syndrome. She is unable to walk or
-                  stand unaided and has limited use of her hands.
+                  Rosalie is a 9-year old girl living with Rett syndrome. She is unable to walk or stand unaided and has
+                  limited use of her hands.
                 </p>
                 <p className="text-gray-600 mb-6">
-                  Funds will go towards buying Rosalie a hiking cart, allowing her to experience the
-                  outdoors with her family.
+                  Funds will go towards buying Rosalie a hiking cart, allowing her to experience the outdoors with her
+                  family.
                 </p>
 
                 <div className="bg-gray-50 rounded-lg p-4">
@@ -413,17 +401,13 @@ export default function FundRaider({ param }: { param: string }) {
                     {fundraiser.fundraiserAddress.ensName ? (
                       <>
                         {" "}
-                        <code className="text-sm bg-white p-1 rounded">
-                          {fundraiser.fundraiserAddress.ensName}
-                        </code>
+                        <code className="text-sm bg-white p-1 rounded">{fundraiser.fundraiserAddress.ensName}</code>
                         <Link href={fundraiser.fundraiserAddress.ensName}>
                           <ExternalLink className="w-4 h-4" />
                         </Link>
                       </>
                     ) : (
-                      <code className="text-sm bg-white px-2 py-1 rounded">
-                        {fundraiser.fundraiserAddress.address}
-                      </code>
+                      <code className="text-sm bg-white px-2 py-1 rounded">{fundraiser.fundraiserAddress.address}</code>
                     )}
                   </div>
                 </div>
