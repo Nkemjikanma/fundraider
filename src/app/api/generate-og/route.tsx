@@ -3,9 +3,7 @@ import { fundraisers } from "@/lib/constants";
 import { ImageResponse } from "@vercel/og";
 import type { NextRequest } from "next/server";
 
-export const config = {
-  runtime: "edge",
-};
+export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   const headers = new Headers({
@@ -95,17 +93,6 @@ export async function GET(request: NextRequest) {
             backgroundColor: "#D5C0A0",
           }}
         >
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "8px",
-              height: "100%",
-              background: "#D5C0A0",
-            }}
-          />
           <div
             style={{
               display: "flex",
