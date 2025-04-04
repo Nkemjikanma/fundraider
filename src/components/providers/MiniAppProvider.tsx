@@ -120,9 +120,11 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
-    if (sdk && !isLoaded) {
-      load();
-    }
+    // if (sdk && !isLoaded) {
+    //   load();
+    // }
+
+    load();
 
     return () => {
       sdk.removeAllListeners();
