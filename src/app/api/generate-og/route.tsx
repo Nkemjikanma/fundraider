@@ -7,10 +7,10 @@ export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   const headers = new Headers({
-    "Cache-Control": "no-cache, no-store, must-revalidate",
-    Pragma: "no-cache",
-    Expires: "0",
-    "Content-Type": "image/jpeg",
+    "Cache-Control": "public, immutable, no-transform, max-age=300",
+    // Pragma: "no-cache",
+    // Expires: "0",
+    // "Content-Type": "image/jpeg",
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET",
   });
