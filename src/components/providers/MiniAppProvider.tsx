@@ -138,27 +138,10 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      const result = await sdk.actions.addFrame();
-      console.log("addFrame result:", result);
-
-      if (result.notificationDetails) {
-        setIsAdded(true);
-        if (result.notificationDetails) {
-          setNotificationDetails(result.notificationDetails);
-        }
-      }
+      await sdk.actions.addFrame();
+      console.log("addFrame result:");
     } catch (e: unknown) {
-      if (
-        typeof e === "object" &&
-        e !== null &&
-        "reason" in e &&
-        (e.reason === "rejected_by_user" ||
-          e.reason === "invalid_domain_manifest")
-      ) {
-        console.log(`Frame add rejected: ${e.reason}`);
-      } else {
-        console.log("Unknown error", e);
-      }
+      console.log("Unknown error", e);
     }
   }, [context?.client.added]);
 
