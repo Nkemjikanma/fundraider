@@ -8,9 +8,10 @@ import {
 } from "alchemy-sdk";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { toHex } from "viem";
 import { base, degen, zora } from "wagmi/chains";
 import { TOKENS, alchemy, rosaliesAddress } from "./constants";
-import type { FundRaisers, Token } from "./types";
+import type { FundRaisers, Token, TransactionsResponse } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -55,65 +56,49 @@ export const getAlchemyWalletBalance = async (address: string) => {
   }
 };
 
-export const getAlchemyTransfers = async (address: string) => {
+export const getAlchemyTransfers = async (
+  address: string,
+  pageKey?: string,
+): Promise<TransactionsResponse> => {
   try {
+    const params: any = {
+      fromBlock: "0x0",
+      toAddress: address,
+      excludeZeroValue: true,
+      category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.EXTERNAL],
+      withMetadata: true,
+      order: SortingOrder.DESCENDING,
+      maxCount: 10,
+    };
+
+    if (pageKey) {
+      params.pageKey = pageKey;
+    }
     const transfers = await alchemy.core
-      .getAssetTransfers({
-        fromBlock: "0x0",
-        toAddress: address,
-        excludeZeroValue: true,
-        category: [
-          AssetTransfersCategory.ERC20,
-          AssetTransfersCategory.EXTERNAL,
-        ],
-        withMetadata: true,
-        order: SortingOrder.DESCENDING,
-      })
-      .then((transfer) =>
-        transfer.transfers.filter((transfer, index) => {
-          if (transfer.asset) {
-            return ["eth", "usdc", "degen"].includes(
-              transfer.asset.toLowerCase(),
-            );
-          }
-          return false;
-        }),
-      );
+      .getAssetTransfers(params)
+      .then((transfer) => {
+        const filteredTransfers = transfer.transfers.filter(
+          (transfer, index) => {
+            if (transfer.asset) {
+              return ["eth", "usdc", "degen"].includes(
+                transfer.asset.toLowerCase(),
+              );
+            }
+            return false;
+          },
+        );
+        return {
+          transfers: filteredTransfers,
+          pageKey: transfer.pageKey,
+        };
+      });
+
     return transfers;
   } catch (error) {
     console.log("Error fetching asset transfers:", error);
     throw error;
   }
 };
-
-export async function imageToBase64(imageURL: string): Promise<string> {
-  try {
-    new URL(imageURL); // Will throw if invalid
-
-    const response = await fetch(imageURL, {
-      headers: {
-        Accept: "image/*",
-      },
-    });
-    const arrayBuffer = await response.arrayBuffer();
-
-    const uint8Array = new Uint8Array(arrayBuffer);
-    let binaryString = "";
-    uint8Array.forEach((byte) => (binaryString += String.fromCharCode(byte)));
-    const base64String = btoa(binaryString);
-
-    const contentType = response.headers.get("content-type") || "image/jpeg";
-
-    // const base64String = Buffer.from(arrayBuffer).toString("base64");
-
-    console.log(`data:${contentType};base64,${base64String}`);
-
-    return `data:${contentType};base64,${base64String}`;
-  } catch (e) {
-    console.log("Error converting image to base64:", e);
-    throw e;
-  }
-}
 
 export const generateSignInNonce = (length = 32) => {
   const randomBytes = new Uint8Array(length);

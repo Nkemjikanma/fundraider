@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const address = searchParams.get("address");
+  const page = searchParams.get("page");
 
   if (!address) {
     return NextResponse.json(
@@ -14,11 +15,25 @@ export async function GET(request: Request) {
     );
   }
 
+  const pageKey = page ? page : undefined;
+
   try {
-    const transfers = await getAlchemyTransfers(address);
-    return NextResponse.json({ transfers }, { status: 200 });
+    const transfers = await getAlchemyTransfers(address, pageKey);
+
+    return NextResponse.json(
+      {
+        transfers: {
+          transfers: transfers.transfers,
+          pageKey: transfers.transfers.pageKey,
+        },
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("Error fetching transfers:", error);
-    return NextResponse.json({ error: "Failed to fetch transfers" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch transfers" },
+      { status: 500 },
+    );
   }
 }
