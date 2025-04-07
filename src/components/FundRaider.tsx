@@ -47,7 +47,7 @@ export default function FundRaider({ param }: { param: string }) {
   const [showQuickDonateError, setShowQuickDonateError] = useState(false);
   const [showTransactionFlow, setShowTransactionFlow] = useState(false);
   const [customAmount, setCustomAmount] = useState<string>("");
-  const [selectedToken, setSelectedToken] = useState<Token>(TOKENS[0]);
+  const [selectedToken, setSelectedToken] = useState<Token>(TOKENS[1]);
   const [txHash, setTxHash] = useState<string | null>(null);
   const { address: userAddress, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
