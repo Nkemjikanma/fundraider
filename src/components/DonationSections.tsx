@@ -45,7 +45,7 @@ interface DonationSectionProps {
   isTransactionError: boolean;
 }
 
-const FIXED_AMOUNTS = [0.01, 0.05, 0.1, 0.25, 0.5, 1];
+const FIXED_AMOUNTS = [1, 5, 25, 50, 100, 500];
 
 export const DonationSection = ({
   isConnected,
@@ -117,13 +117,13 @@ export const DonationSection = ({
                   className={`w-full rounded-none ${!isConnected ? "opacity-50 cursor-not-allowed" : ""}`}
                   disabled={!isConnected || !userAddress}
                 >
-                  {amount} ETH
+                  {amount} USDC
                 </Button>
               ))}
             </div>
             {showQuickDonateError && (
               <p className="text-red-500 text-xs">
-                Not enough ETH in thy wallet <span className="ml-1">👎🏾</span>
+                Not enough USDC in thy wallet <span className="ml-1">👎🏾</span>
               </p>
             )}
           </div>
@@ -139,16 +139,16 @@ export const DonationSection = ({
                     onValueChange={(value) => {
                       setSelectedToken(
                         TOKENS.find((token) => token.symbol === value) ??
-                          TOKENS[0],
+                          TOKENS[1],
                       );
                       setCustomAmount("0.0");
                     }}
-                    defaultValue={TOKENS[0].symbol}
+                    defaultValue={TOKENS[1].symbol}
                   >
                     <SelectTrigger className="w-[100px] absolute left-0 z-10 rounded-none">
                       <SelectValue
                         placeholder="Token"
-                        defaultValue={TOKENS[0].symbol}
+                        defaultValue={TOKENS[1].symbol}
                       />
                     </SelectTrigger>
                     <SelectContent>

@@ -99,6 +99,7 @@ export default function FundRaider({ param }: { param: string }) {
       try {
         const ownerTokensWagmi = await getBalance(config, {
           address: userAddress,
+          token: TOKENS[1].address as `0x${string}`,
           blockTag: "latest",
           chainId: base.id,
         });
@@ -109,7 +110,7 @@ export default function FundRaider({ param }: { param: string }) {
 
         if (Number(formattedBalance) > Number(customAmount)) {
           setCustomAmount(Number(amount).toFixed(4).toString());
-          setSelectedToken(TOKENS[0]);
+          setSelectedToken(TOKENS[1]);
           setShowTransactionFlow(true);
         } else {
           setShowQuickDonateError(true);
