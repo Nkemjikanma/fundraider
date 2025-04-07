@@ -47,7 +47,7 @@ export default function FundRaider({ param }: { param: string }) {
   const [showQuickDonateError, setShowQuickDonateError] = useState(false);
   const [showTransactionFlow, setShowTransactionFlow] = useState(false);
   const [customAmount, setCustomAmount] = useState<string>("");
-  const [selectedToken, setSelectedToken] = useState<Token>(TOKENS[0]);
+  const [selectedToken, setSelectedToken] = useState<Token>(TOKENS[1]);
   const [txHash, setTxHash] = useState<string | null>(null);
   const { address: userAddress, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
@@ -61,16 +61,9 @@ export default function FundRaider({ param }: { param: string }) {
     error: balanceError,
   } = useBalance(fundraiser.fundraiserAddress.address);
 
-  const {
-    data: transactionsData,
-    isLoading: isTransactionsLoading,
-    error: transactionsError,
-  } = useTransactions(fundraiser.fundraiserAddress.address);
-
-  const isLoading = !isLoaded || isBalanceLoading || isTransactionsLoading;
+  const isLoading = !isLoaded || isBalanceLoading;
 
   const raised = balanceData ? balanceData.balance : "0";
-  const transactions = transactionsData?.transfers;
 
   const { isPending: isSendTxPending, sendTransaction } = useSendTransaction();
 
@@ -99,6 +92,7 @@ export default function FundRaider({ param }: { param: string }) {
       try {
         const ownerTokensWagmi = await getBalance(config, {
           address: userAddress,
+          token: TOKENS[1].address as `0x${string}`,
           blockTag: "latest",
           chainId: base.id,
         });
@@ -109,7 +103,7 @@ export default function FundRaider({ param }: { param: string }) {
 
         if (Number(formattedBalance) > Number(customAmount)) {
           setCustomAmount(Number(amount).toFixed(4).toString());
-          setSelectedToken(TOKENS[0]);
+          setSelectedToken(TOKENS[1]);
           setShowTransactionFlow(true);
         } else {
           setShowQuickDonateError(true);
@@ -212,13 +206,11 @@ export default function FundRaider({ param }: { param: string }) {
   }
 
   // error from balanceError or transactionsError
-  if (balanceError || transactionsError) {
+  if (balanceError) {
     return (
       <div className="p-4 bg-red-50 rounded-lg">
         <h2 className="text-red-600 font-bold">Error loading data</h2>
-        <p className="text-red-500">
-          {balanceError?.message || transactionsError?.message}
-        </p>
+        <p className="text-red-500">{balanceError?.message}</p>
         <Button
           onClick={() => window.location.reload()}
           className="mt-2"
@@ -401,7 +393,7 @@ export default function FundRaider({ param }: { param: string }) {
         </TabsContent>
 
         <TabsContent value="donations" className="">
-          <DonationFeed transactions={transactions} />
+          <DonationFeed fundraiser={fundraiser} />
         </TabsContent>
       </Tabs>
     </div>

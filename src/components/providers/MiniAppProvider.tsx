@@ -120,29 +120,18 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
-    // if (sdk && !isLoaded) {
-    //   load();
-    // }
-
     load();
 
     return () => {
       sdk.removeAllListeners();
     };
-    // run only once when page loads.
-  }, []);
+  }, [getSignInNonce]);
 
   const addMiniApp = useCallback(async () => {
     if (context?.client.added) {
       return;
     }
-
-    try {
-      await sdk.actions.addFrame();
-      console.log("addFrame result:");
-    } catch (e: unknown) {
-      console.log("Unknown error", e);
-    }
+    await sdk.actions.addFrame();
   }, [context?.client.added]);
 
   const handleShare = useCallback(
@@ -178,7 +167,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
         `https://warpcast.com/~/compose?text=${encodeURIComponent(message)}&embeds[]=${encodeURIComponent(url)}`,
       );
     },
-    [fundraiser],
+    [fundraiser, isValidFrameContext],
   );
 
   const value = useMemo(

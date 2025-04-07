@@ -1,30 +1,50 @@
 "use client";
 
-import type { AssetTransfersResult, AssetTransfersWithMetadataResult } from "alchemy-sdk";
+import { useTransactions } from "@/lib/hooks/useTransactions";
+import type { Fundraiser, TransactionsResponse } from "@/lib/types";
+import type { AssetTransfersWithMetadataResult } from "alchemy-sdk";
 import { formatDistanceToNow } from "date-fns";
 import { motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
+import { Button } from "./ui/button";
 
 interface TransactionFeedProps {
-  transactions?: AssetTransfersWithMetadataResult[];
-  // loading: boolean;
+  fundraiser: Fundraiser;
 }
 
 // { transactions, loading }: TransactionFeedProps
-export function DonationFeed({ transactions = [] }: TransactionFeedProps) {
-  const loading = false;
+export function DonationFeed({ fundraiser }: TransactionFeedProps) {
+  const [donationFeedPageKey, setDonationFeedPageKey] = useState<
+    string | undefined
+  >("");
+  const { data, isLoading, error, isFetching, refetch } = useTransactions(
+    fundraiser.fundraiserAddress.address,
+    donationFeedPageKey,
+  );
 
-  if (loading) {
+  const transfersList = data?.transfers.transfers;
+
+  const handleLoadMore = async () => {
+    try {
+      setDonationFeedPageKey(data?.transfers.pageKey);
+      await refetch();
+    } catch (error) {
+      console.error("Error loading more transactions:", error);
+    }
+  };
+
+  if (transfersList?.length === 0) {
     return (
-      <div className="flex justify-center p-8">
-        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      <div className="text-center p-8 border rounded-lg">
+        <p className="text-gray-500">No transactions yet</p>
       </div>
     );
   }
 
-  if (transactions.length === 0) {
+  if (isLoading || isFetching || !data) {
     return (
-      <div className="text-center p-8 border rounded-lg">
-        <p className="text-gray-500">No transactions yet</p>
+      <div className="flex justify-center p-8">
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -35,7 +55,7 @@ export function DonationFeed({ transactions = [] }: TransactionFeedProps) {
         <h3 className="font-medium">Recent Donations</h3>
       </div>
       <ul className="divide-y">
-        {transactions.map((tx, index) => (
+        {transfersList?.flatMap((tx, index) => (
           <motion.li
             key={tx.uniqueId}
             initial={{ opacity: 0, y: 20 }}
@@ -62,6 +82,14 @@ export function DonationFeed({ transactions = [] }: TransactionFeedProps) {
           </motion.li>
         ))}
       </ul>
+
+      {donationFeedPageKey && (
+        <div>
+          <Button variant="outline" onClick={handleLoadMore}>
+            {isLoading || isFetching ? "Loading..." : "Load more..."}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

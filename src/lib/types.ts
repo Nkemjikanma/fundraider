@@ -34,5 +34,8 @@ export interface Balance {
 }
 
 export interface TransactionsResponse {
-  transfers: AssetTransfersWithMetadataResult[];
+  transfers: {
+    transfers: AssetTransfersWithMetadataResult[];
+    pageKey?: string;
+  };
 }
