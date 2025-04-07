@@ -24,12 +24,9 @@ export function DonationFeed({ fundraiser }: TransactionFeedProps) {
 
   const transfersList = data?.transfers.transfers;
 
-  useEffect(() => {
-    setDonationFeedPageKey(data?.transfers.pageKey);
-  }, [data?.transfers.pageKey]);
-
   const handleLoadMore = async () => {
     try {
+      setDonationFeedPageKey(data?.transfers.pageKey);
       await refetch();
     } catch (error) {
       console.error("Error loading more transactions:", error);

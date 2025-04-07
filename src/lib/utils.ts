@@ -8,10 +8,9 @@ import {
 } from "alchemy-sdk";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { toHex } from "viem";
 import { base, degen, zora } from "wagmi/chains";
 import { TOKENS, alchemy, rosaliesAddress } from "./constants";
-import type { FundRaisers, Token, TransactionsResponse } from "./types";
+import type { TransactionsResponse } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -59,7 +58,7 @@ export const getAlchemyWalletBalance = async (address: string) => {
 export const getAlchemyTransfers = async (
   address: string,
   pageKey?: string,
-): Promise<TransactionsResponse> => {
+) => {
   try {
     const params: any = {
       fromBlock: "0x0",

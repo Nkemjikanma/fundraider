@@ -24,7 +24,7 @@ export async function GET(request: Request) {
       {
         transfers: {
           transfers: transfers.transfers,
-          pageKey: transfers.transfers.pageKey,
+          pageKey: transfers.pageKey,
         },
       },
       { status: 200 },
