@@ -102,7 +102,7 @@ export default function FundRaider({ param }: { param: string }) {
         );
 
         if (Number(formattedBalance) > Number(customAmount)) {
-          setCustomAmount(Number(amount).toFixed(4).toString());
+          setCustomAmount(Number(amount).toString());
           setSelectedToken(TOKENS[1]);
           setShowTransactionFlow(true);
         } else {
