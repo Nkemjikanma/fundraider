@@ -1,6 +1,7 @@
 import { appURL, fundraisers } from "@/lib/constants";
 import { generateSignInNonce } from "@/lib/utils";
 import {
+  AddFrame,
   type Context,
   type FrameNotificationDetails,
   type SignIn,
@@ -37,6 +38,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
   const [context, setContext] = useState<MiniAppContextType["context"]>();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
+  const [addFrameResult, setAddFrameResult] = useState("");
   const [notificationDetails, setNotificationDetails] =
     useState<FrameNotificationDetails | null>(null);
   const [signInResult, setSignInResult] =
@@ -128,11 +130,31 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
   }, [getSignInNonce]);
 
   const addMiniApp = useCallback(async () => {
-    if (context?.client.added) {
-      return;
+    try {
+      setNotificationDetails(null);
+
+      const result = await sdk.actions.addFrame();
+
+      if (result.notificationDetails) {
+        setNotificationDetails(result.notificationDetails);
+      }
+      setAddFrameResult(
+        result.notificationDetails
+          ? `Added, got notificaton token ${result.notificationDetails.token} and url ${result.notificationDetails.url}`
+          : "Added, got no notification details",
+      );
+    } catch (error) {
+      if (error instanceof AddFrame.RejectedByUser) {
+        setAddFrameResult(`Not added: ${error.message}`);
+      }
+
+      if (error instanceof AddFrame.InvalidDomainManifest) {
+        setAddFrameResult(`Not added: ${error.message}`);
+      }
+
+      setAddFrameResult(`Error: ${error}`);
     }
-    await sdk.actions.addFrame();
-  }, [context?.client.added]);
+  }, []);
 
   const handleShare = useCallback(
     async (raised?: string, shareMessage?: string) => {
