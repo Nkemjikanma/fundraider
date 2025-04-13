@@ -127,7 +127,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
     return () => {
       sdk.removeAllListeners();
     };
-  }, [getSignInNonce]);
+  }, []);
 
   const addMiniApp = useCallback(async () => {
     try {
