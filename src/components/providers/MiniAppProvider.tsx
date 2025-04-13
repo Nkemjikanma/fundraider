@@ -1,11 +1,10 @@
 import { appURL, fundraisers } from "@/lib/constants";
 import { generateSignInNonce } from "@/lib/utils";
-import {
+import sdk, {
   AddFrame,
   type Context,
   type FrameNotificationDetails,
   type SignIn,
-  sdk,
 } from "@farcaster/frame-sdk";
 import { useRouter } from "next/navigation";
 import {

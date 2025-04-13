@@ -38,9 +38,6 @@ import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 
 export default function FundRaider({ param }: { param: string }) {
-  const { handleShare, isLoaded, isAdded, context, isValidFrameContext } =
-    useMiniApp();
-
   //TODO: get current fundraiser data using param
   const fundraiser = fundraisers[0];
 
@@ -54,6 +51,9 @@ export default function FundRaider({ param }: { param: string }) {
   const { connect } = useConnect();
   const { writeContractAsync } = useWriteContract();
   const router = useRouter();
+
+  const { handleShare, isLoaded, isAdded, context, isValidFrameContext } =
+    useMiniApp();
 
   const {
     data: balanceData,
