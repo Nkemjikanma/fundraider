@@ -1,11 +1,10 @@
 import { appURL, fundraisers } from "@/lib/constants";
 import { generateSignInNonce } from "@/lib/utils";
-import {
+import sdk, {
   AddFrame,
   type Context,
   type FrameNotificationDetails,
   type SignIn,
-  sdk,
 } from "@farcaster/frame-sdk";
 import { useRouter } from "next/navigation";
 import {
@@ -122,11 +121,14 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       }
     };
 
-    load();
-
-    return () => {
-      sdk.removeAllListeners();
-    };
+    if (sdk && !isLoaded) {
+      console.log("Calling load");
+      setIsLoaded(true);
+      load();
+      return () => {
+        sdk.removeAllListeners();
+      };
+    }
   }, []);
 
   const addMiniApp = useCallback(async () => {

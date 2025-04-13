@@ -19,7 +19,7 @@ export async function GET() {
       buttonTitle: "Fund raid",
       splashImageUrl: "https://fundraider.xyz/fundraider_logo.webp",
       splashBackgroundColor: "#D5C0A0",
-      webhookUrl: "https://fundraider.xyz/api/webhook",
+      // webhookUrl: "https://fundraider.xyz/api/webhook",
     },
   };
 

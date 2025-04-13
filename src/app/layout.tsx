@@ -9,7 +9,6 @@ const appURL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 const frame = {
   version: "next",
   imageUrl: `${appURL}/og_fundraider.jpeg`,
-  image: `${appURL}/og_fundraider.jpeg`,
   button: {
     title: "Fund raid",
     action: {
