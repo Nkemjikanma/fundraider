@@ -291,7 +291,10 @@ export default function FundRaider({ param }: { param: string }) {
                 </div>
               </div>
               <div className="text-md font-bold text-teal-600 mt-3">
-                {Number(walletValueData?.totalValueInETH || 0).toFixed(3)} ETH
+                {Number(walletValueData?.totalValueInETH || 0).toFixed(3)} ETH{" "}
+                <span className="font-semibold text-sm text-gray-600">
+                  ({Number(walletValueData?.totalValueInUSD || 0)} USDC)
+                </span>
               </div>
               <div className="text-sm text-gray-600">
                 raised of {fundraiser.goal} ETH goal
