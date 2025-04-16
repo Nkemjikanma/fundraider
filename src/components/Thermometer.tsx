@@ -5,26 +5,21 @@ import { useBalance } from "@/lib/hooks/useBalance";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { formatEther } from "viem";
+import { useMiniApp } from "./providers/MiniAppProvider";
 
 interface ThermometerProps {
   fundraiserId?: string;
-  // progress: number;
-  // goal: number;
-  // balance: number;
 }
 
 export function Thermometer({ fundraiserId }: ThermometerProps) {
-  // const [progress, setProgress] = useState(externalProgress);
+  // const [progress, setProgress] = useState(0);
   const [time, setTime] = useState(0);
   const requestRef = useRef<number>(0);
   const fundraiser = fundraisers[0];
 
-  const {
-    data: balanceData,
-    isLoading: isBalanceLoading,
-    error: balanceError,
-  } = useBalance(fundraiser.fundraiserAddress.address);
-  const raised = balanceData ? balanceData.balance : "0";
+  const { walletValueData } = useMiniApp();
+
+  const raised = Number(walletValueData?.totalValueInETH || 0);
   const progress = (Number(raised) / fundraiser.goal) * 100;
 
   // Animation loop for flowing effect
@@ -47,7 +42,15 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
     const width = i % 5 === 0 ? 10 : 5;
 
     return (
-      <line key={i} x1={35 - width} y1={y} x2={45 + width} y2={y} stroke="#333" strokeWidth={i % 5 === 0 ? 2 : 1} />
+      <line
+        key={i}
+        x1={35 - width}
+        y1={y}
+        x2={45 + width}
+        y2={y}
+        stroke="#333"
+        strokeWidth={i % 5 === 0 ? 2 : 1}
+      />
     );
   });
 
@@ -55,7 +58,8 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
   const bubbles = Array.from({ length: 5 }).map((_, i) => {
     const size = 2 + Math.sin(time + i) * 1;
     const xOffset = Math.sin(time * 2 + i * 5) * 4;
-    const yOffset = mercuryHeight > 0 ? (time * 10 + i * 50) % mercuryHeight : 0;
+    const yOffset =
+      mercuryHeight > 0 ? (time * 10 + i * 50) % mercuryHeight : 0;
 
     return (
       <circle
@@ -97,14 +101,27 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
           role="img"
         >
           <defs>
-            <linearGradient id="mercuryGradientTube" x1="0%" y1="0%" x2="0%" y2="100%">
+            <linearGradient
+              id="mercuryGradientTube"
+              x1="0%"
+              y1="0%"
+              x2="0%"
+              y2="100%"
+            >
+              <stop offset="25%" stopColor="#FFDB5B" />
+              <stop offset="50%" stopColor="#FF9E5B" />
               <stop offset="75%" stopColor="#8AFF5B" />
               <stop offset="100%" stopColor="#5BD3FF" />
-              <stop offset="50%" stopColor="#FFDB5B" />
               <stop offset="75%" stopColor="#8AFF5B" />
             </linearGradient>
 
-            <linearGradient id="mercuryGradientBulb" x1="0%" y1="0%" x2="0%" y2="100%">
+            <linearGradient
+              id="mercuryGradientBulb"
+              x1="0%"
+              y1="0%"
+              x2="0%"
+              y2="100%"
+            >
               <stop offset="25%" stopColor="#FF9E5B" />
 
               <stop offset="0%" stopColor="#FF5E5B" />
@@ -119,14 +136,30 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
           <rect x="0" y="0" width="100" height="260" fill="transparent" />
 
           {/* Thermometer tube background */}
-          <rect x="31" y="40" width="18" height="220" rx="8" fill="#f0f0f0" stroke="#333" strokeWidth="2" />
+          <rect
+            x="31"
+            y="40"
+            width="18"
+            height="220"
+            rx="8"
+            fill="#f0f0f0"
+            stroke="#333"
+            strokeWidth="2"
+          />
 
           {/* Measurement lines */}
           {measurementLines}
 
           {/* Percentage labels */}
           {percentagePositions.map(({ percent, y }) => (
-            <text key={percent} x="17" y={y + 5} fontSize="10" textAnchor="end" fill="#333">
+            <text
+              key={percent}
+              x="17"
+              y={y + 5}
+              fontSize="10"
+              textAnchor="end"
+              fill="#333"
+            >
               {percent}
             </text>
           ))}
@@ -144,16 +177,34 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
           )}
 
           {/* Bulb outline */}
-          <circle cx="40" cy="260" r="20" fill="#f0f0f0" stroke="#333" strokeWidth="2" />
+          <circle
+            cx="40"
+            cy="260"
+            r="20"
+            fill="#f0f0f0"
+            stroke="#333"
+            strokeWidth="2"
+          />
 
           {/* Mercury in bulb */}
-          <circle cx="40" cy="260" r="19" fill={mercuryHeight > 0 ? "url(#mercuryGradientBulb)" : "#f0f0f0"} />
+          <circle
+            cx="40"
+            cy="260"
+            r="19"
+            fill={mercuryHeight > 0 ? "url(#mercuryGradientBulb)" : "#f0f0f0"}
+          />
 
           {/* Bubbles */}
           {bubbles}
 
           {/* Glass shine effect */}
-          <ellipse cx="36" cy="250" rx="5" ry="8" fill="rgba(255, 255, 255, 0.3)" />
+          <ellipse
+            cx="36"
+            cy="250"
+            rx="5"
+            ry="8"
+            fill="rgba(255, 255, 255, 0.3)"
+          />
         </svg>
 
         {/* Current value indicator */}
@@ -163,7 +214,7 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
             style={{
               top: `${Math.min(
                 Math.max(
-                  260 - mercuryHeight, // Align with current progress percentage
+                  275 - mercuryHeight, // Align with current progress percentage
                   1, // Minimum position (top of thermometer)
                 ),
                 370, // Maximum position (bottom of thermometer)
@@ -186,11 +237,11 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
         increase
       </button> */}
 
-      {/* {loading && (
-				<div className="absolute inset-0 flex items-center justify-center bg-white/50">
-					<div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-				</div>
-			)} */}
+      {/* {!walletValueData && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white/50">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      )} */}
     </div>
   );
 }

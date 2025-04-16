@@ -39,3 +39,21 @@ export interface TransactionsResponse {
     pageKey?: string;
   };
 }
+
+export interface TokenDetail {
+  address: string;
+  symbol: string;
+  name: string;
+  decimals: number;
+  rawBalance: string;
+  formattedBalance: string;
+  priceInUSD: string;
+  valueInUSD: string;
+  logo: string | null;
+}
+
+export interface WalletBalanceSummary {
+  // tokens: TokenDetail[];  // Uncomment if you want to include token details
+  totalValueInUSD: string;
+  totalValueInETH: string;
+}

@@ -1,4 +1,6 @@
 import { appURL, fundraisers } from "@/lib/constants";
+import { useWalletValue } from "@/lib/hooks/useWalletValue";
+import type { WalletBalanceSummary } from "@/lib/types";
 import { generateSignInNonce } from "@/lib/utils";
 import sdk, {
   AddFrame,
@@ -27,6 +29,7 @@ export type MiniAppContextType = {
   isValidFrameContext: boolean | null;
   lastEvent: string;
   handleShare: (raised?: string, shareMessage?: string) => void;
+  walletValueData: WalletBalanceSummary | undefined;
 };
 
 const MiniAppContext = createContext<MiniAppContextType | undefined>(undefined);
@@ -47,6 +50,10 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
   const [isValidFrameContext, setIsValidFrameContext] =
     useState<MiniAppContextType["isValidFrameContext"]>(null);
   const [lastEvent, setLastEvent] = useState("");
+
+  const { data: walletValueData } = useWalletValue(
+    fundraiser.fundraiserAddress.address,
+  );
 
   const router = useRouter();
 
@@ -206,6 +213,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       isValidFrameContext,
       addMiniApp,
       handleShare,
+      walletValueData,
     }),
     [
       context,
@@ -218,6 +226,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       isValidFrameContext,
       addMiniApp,
       handleShare,
+      walletValueData,
     ],
   );
 

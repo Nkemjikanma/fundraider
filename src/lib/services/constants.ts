@@ -3,6 +3,7 @@ export const API_ENDPOINTS = {
   TOKEN_BALANCE: "/api/token-balance",
   TRANSFERS: "/api/transfers",
   VALID_TOKENS: "/api/valid-tokens",
+  WALLET_VALUE: "/api/wallet-value",
 };
 
 export const DEFAULT_HEADERS = {

@@ -2,7 +2,7 @@ import { config } from "@/components/providers/Wagmi";
 import { TOKENS } from "@/lib/constants";
 import type { Fundraiser, Token } from "@/lib/types";
 import { WalletIcon } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Farcaster } from "./Icons/Farcaster";
 import { TransactionFlow } from "./TransactionFlow";
 import { Button } from "./ui/button";
@@ -31,7 +31,6 @@ interface DonationSectionProps {
   showTransactionFlow: boolean;
   showQuickDonateError: boolean;
   handleQuickDonateButtons: (amount: number) => Promise<void>;
-  // Additional props needed from parent
   disconnect: () => void;
   connect: (config: any) => void;
   fundraiser: Fundraiser;
@@ -73,6 +72,12 @@ export const DonationSection = ({
   isTransactionError,
 }: DonationSectionProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if ((isConfirmed || isConfirming) && showTransactionFlow) {
+      setShowTransactionFlow(false);
+    }
+  }, [isConfirmed, isConfirming, showTransactionFlow]);
 
   return (
     <Card className="w-full mt-4 z-10">

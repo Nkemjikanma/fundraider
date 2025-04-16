@@ -3,7 +3,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fundraisers } from "@/lib/constants";
+import { useWalletValue } from "@/lib/hooks/useWalletValue";
 import { getWalletBalance } from "@/lib/services";
+import { getTotalWalletBalance } from "@/lib/utils";
 import sdk, { type FrameNotificationDetails } from "@farcaster/frame-sdk";
 import { Clock, PlusIcon, Share2 } from "lucide-react";
 import Image from "next/image";
@@ -23,24 +25,16 @@ export default function HomePage() {
     handleShare,
     isAdded,
     addMiniApp,
+    walletValueData,
   } = useMiniApp();
-  const [raised, setRaised] = useState<string>("0");
   const [totalRaised, setTotalRaised] = useState<string>("0");
+  const fundraiser = fundraisers[0];
 
   const router = useRouter();
-
-  const fundraiser = fundraisers[0];
 
   useEffect(() => {
     const fetchBalance = async () => {
       try {
-        // fetch each fundraiser balance
-        const balanceResponse = await getWalletBalance(
-          fundraisers[0].fundraiserAddress.address,
-        );
-
-        setRaised(balanceResponse.balance);
-
         // Total of all fundraisers on Fundraider
         const fetchTotalFundraids = fundraisers.map(
           async (fundraiser) =>
@@ -97,7 +91,12 @@ export default function HomePage() {
         <Card>
           <CardContent className="p-4">
             <p className="text-sm text-gray-600">Total Raised</p>
-            <h3 className="text-xl font-bold text-wrap">{totalRaised} ETH</h3>
+            <h3 className="text-xl font-bold text-wrap">
+              {Number(walletValueData?.totalValueInETH || 0)
+                .toFixed(3)
+                .toString()}{" "}
+              ETH
+            </h3>
           </CardContent>
         </Card>
         <Card>
@@ -145,7 +144,10 @@ export default function HomePage() {
                 <div className="flex flex-row w-full justify-between mt-2">
                   <div className="flex w-full justify-between items-center">
                     <span className="text-sm font-medium">
-                      {Number(raised).toFixed(4)} ETH raised
+                      {Number(walletValueData?.totalValueInETH || 0)
+                        .toFixed(3)
+                        .toString()}{" "}
+                      ETH raised
                     </span>
                     <span className="text-sm text-gray-500">
                       Goal: {fundraiser.goal} ETH
@@ -156,7 +158,7 @@ export default function HomePage() {
                   <div
                     className="relative bg-teal-500 h-2.5"
                     style={{
-                      width: `${(Number(raised) / fundraiser.goal) * 100}%`,
+                      width: `${(Number(walletValueData?.totalValueInETH) || 0 / fundraiser.goal) * 100}%`,
                     }}
                   />
                 </div>

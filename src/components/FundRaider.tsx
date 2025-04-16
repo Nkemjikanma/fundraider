@@ -52,8 +52,14 @@ export default function FundRaider({ param }: { param: string }) {
   const { writeContractAsync } = useWriteContract();
   const router = useRouter();
 
-  const { handleShare, isLoaded, isAdded, context, isValidFrameContext } =
-    useMiniApp();
+  const {
+    handleShare,
+    isLoaded,
+    isAdded,
+    context,
+    isValidFrameContext,
+    walletValueData,
+  } = useMiniApp();
 
   const {
     data: balanceData,
@@ -285,10 +291,10 @@ export default function FundRaider({ param }: { param: string }) {
                 </div>
               </div>
               <div className="text-md font-bold text-teal-600 mt-3">
-                {Number(raised).toFixed(4)} ETH
+                {Number(walletValueData?.totalValueInETH || 0).toFixed(3)} ETH
               </div>
               <div className="text-sm text-gray-600">
-                raised of {fundraiser.goal.toFixed(4)} ETH goal
+                raised of {fundraiser.goal} ETH goal
               </div>
               <div className="mt-4 flex items-center gap-2 mb-6">
                 <Clock className="w-4 h-4 text-gray-500" />
@@ -298,7 +304,7 @@ export default function FundRaider({ param }: { param: string }) {
               </div>
             </div>
 
-            {fundraiser.goal > Number(raised) ? (
+            {fundraiser.goal > Number(walletValueData?.totalValueInETH) ? (
               <div className="bg-red-50 text-red-600 py-2 px-3 rounded-none text-center text-xs font-medium border border-red-100">
                 Goal not reached yet — Help make a difference!
               </div>
