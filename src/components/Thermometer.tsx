@@ -2,6 +2,8 @@
 
 import { fundraisers } from "@/lib/constants";
 import { useBalance } from "@/lib/hooks/useBalance";
+import { useTransactions } from "@/lib/hooks/useTransactions";
+import { getSumOfTransfers } from "@/lib/utils";
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { formatEther } from "viem";
@@ -13,11 +15,35 @@ interface ThermometerProps {
 
 export function Thermometer({ fundraiserId }: ThermometerProps) {
   // const [progress, setProgress] = useState(0);
+  const [transferSummary, setTransferSummary] = useState<
+    | {
+        totalUSD: number;
+        totalETH: string;
+      }
+    | undefined
+  >();
   const [time, setTime] = useState(0);
   const requestRef = useRef<number>(0);
   const fundraiser = fundraisers[0];
 
-  const { walletValueData, transferSummary } = useMiniApp();
+  const { walletValueData } = useMiniApp();
+
+  const { data } = useTransactions(fundraiser.fundraiserAddress.address);
+
+  useEffect(() => {
+    async function calculateTransferSum() {
+      if (data?.transfers.transfers) {
+        try {
+          const summary = await getSumOfTransfers(data.transfers.transfers);
+          setTransferSummary(summary);
+        } catch (error) {
+          console.error("Error calculating transfer sum:", error);
+        }
+      }
+    }
+
+    calculateTransferSum();
+  }, [data?.transfers.transfers.length]);
 
   const raised = fundraiser.updates.campaignGoalReached
     ? transferSummary?.totalUSD.toFixed(2)

@@ -3,9 +3,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fundraisers } from "@/lib/constants";
+import { useTransactions } from "@/lib/hooks/useTransactions";
 import { useWalletValue } from "@/lib/hooks/useWalletValue";
 import { getWalletBalance } from "@/lib/services";
-import { getTotalWalletBalance } from "@/lib/utils";
+import { getSumOfTransfers, getTotalWalletBalance } from "@/lib/utils";
 import sdk, { type FrameNotificationDetails } from "@farcaster/frame-sdk";
 import { Clock, PlusIcon, Share2 } from "lucide-react";
 import Image from "next/image";
@@ -26,38 +27,34 @@ export default function HomePage() {
     isAdded,
     addMiniApp,
     walletValueData,
-    transferSummary,
   } = useMiniApp();
-  const [totalRaised, setTotalRaised] = useState<string>("0");
+  const [transferSummary, setTransferSummary] = useState<
+    | {
+        totalUSD: number;
+        totalETH: string;
+      }
+    | undefined
+  >();
   const fundraiser = fundraisers[0];
 
   const router = useRouter();
 
+  const { data } = useTransactions(fundraiser.fundraiserAddress.address);
+
   useEffect(() => {
-    const fetchBalance = async () => {
-      try {
-        // Total of all fundraisers on Fundraider
-        const fetchTotalFundraids = fundraisers.map(
-          async (fundraiser) =>
-            await getWalletBalance(fundraiser.fundraiserAddress.address),
-        );
-
-        const allFundraids = await Promise.all(fetchTotalFundraids);
-
-        const totalFundraids = allFundraids.reduce(
-          (acc, { balance }) => acc + Number(balance),
-          0,
-        );
-
-        const formattedTotalRaised = totalFundraids.toFixed(4);
-        setTotalRaised(formattedTotalRaised);
-      } catch (error) {
-        console.error("Error fetching wallet balance:", error);
+    async function calculateTransferSum() {
+      if (data?.transfers.transfers) {
+        try {
+          const summary = await getSumOfTransfers(data.transfers.transfers);
+          setTransferSummary(summary);
+        } catch (error) {
+          console.error("Error calculating transfer sum:", error);
+        }
       }
-    };
+    }
 
-    fetchBalance();
-  }, []);
+    calculateTransferSum();
+  }, [data?.transfers.transfers.length]);
 
   const sendWelcomeNotification = async (
     notificationDetails: FrameNotificationDetails,

@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { formatUnits, parseUnits } from "viem";
 import { parseEther } from "viem";
 import {
@@ -47,11 +47,34 @@ export default function FundRaider({ param }: { param: string }) {
   const [customAmount, setCustomAmount] = useState<string>("");
   const [selectedToken, setSelectedToken] = useState<Token>(TOKENS[1]);
   const [txHash, setTxHash] = useState<string | null>(null);
+  const [transferSummary, setTransferSummary] = useState<
+    | {
+        totalUSD: number;
+        totalETH: string;
+      }
+    | undefined
+  >();
   const { address: userAddress, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const { connect } = useConnect();
   const { writeContractAsync } = useWriteContract();
   const router = useRouter();
+  const { data } = useTransactions(fundraiser.fundraiserAddress.address);
+
+  useEffect(() => {
+    async function calculateTransferSum() {
+      if (data?.transfers.transfers) {
+        try {
+          const summary = await getSumOfTransfers(data.transfers.transfers);
+          setTransferSummary(summary);
+        } catch (error) {
+          console.error("Error calculating transfer sum:", error);
+        }
+      }
+    }
+
+    calculateTransferSum();
+  }, [data?.transfers.transfers.length]);
 
   const {
     handleShare,
@@ -60,7 +83,6 @@ export default function FundRaider({ param }: { param: string }) {
     context,
     isValidFrameContext,
     walletValueData,
-    transferSummary,
   } = useMiniApp();
 
   const {

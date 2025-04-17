@@ -274,11 +274,6 @@ export const getSumOfTransfers = async (
 
   const totalETH = (totalUSD / Number(ethPrice)).toFixed(6);
 
-  console.log({
-    totalUSD,
-    totalETH,
-  });
-
   return {
     totalUSD,
     totalETH,
