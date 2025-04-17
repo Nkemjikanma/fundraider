@@ -26,6 +26,7 @@ export default function HomePage() {
     isAdded,
     addMiniApp,
     walletValueData,
+    transferSummary,
   } = useMiniApp();
   const [totalRaised, setTotalRaised] = useState<string>("0");
   const fundraiser = fundraisers[0];
@@ -92,9 +93,11 @@ export default function HomePage() {
           <CardContent className="p-4">
             <p className="text-sm text-gray-600">Total Raised</p>
             <h3 className="text-xl font-bold text-wrap">
-              {Number(walletValueData?.totalValueInETH || 0)
-                .toFixed(3)
-                .toString()}{" "}
+              {fundraiser.updates.campaignGoalReached
+                ? transferSummary?.totalETH
+                : Number(walletValueData?.totalValueInETH || 0)
+                    .toFixed(3)
+                    .toString()}{" "}
               ETH
             </h3>
           </CardContent>
@@ -144,9 +147,11 @@ export default function HomePage() {
                 <div className="flex flex-row w-full justify-between mt-2">
                   <div className="flex w-full justify-between items-center">
                     <span className="text-sm font-medium">
-                      {Number(walletValueData?.totalValueInETH || 0)
-                        .toFixed(3)
-                        .toString()}{" "}
+                      {fundraiser.updates.campaignGoalReached
+                        ? transferSummary?.totalETH
+                        : Number(walletValueData?.totalValueInETH || 0)
+                            .toFixed(3)
+                            .toString()}{" "}
                       ETH raised
                     </span>
                     <span className="text-sm text-gray-500">
@@ -158,7 +163,11 @@ export default function HomePage() {
                   <div
                     className="relative bg-teal-500 h-2.5"
                     style={{
-                      width: `${(Number(walletValueData?.totalValueInETH) || 0 / fundraiser.goal) * 100}%`,
+                      width:
+                        fundraiser.updates.campaignGoalReached &&
+                        Number(transferSummary?.totalETH) >= fundraiser.goal
+                          ? "100%"
+                          : `${(Number(walletValueData?.totalValueInETH) || 0 / fundraiser.goal) * 100}%`,
                     }}
                   />
                 </div>

@@ -1,6 +1,7 @@
 import {
   Alchemy,
   AssetTransfersCategory,
+  type AssetTransfersWithMetadataResult,
   Network,
   SortingOrder,
   type TokenAddressRequest,
@@ -139,21 +140,9 @@ export const getTotalWalletBalance = async (
       .reduce((sum, token) => sum + Number(token?.valueInUSD), 0)
       .toFixed(2);
 
-    const ethPriceData = await alchemy.prices.getTokenPriceByAddress([
-      {
-        network: Network.BASE_MAINNET,
-        address: "0x4200000000000000000000000000000000000006", // WETH on Base
-      },
-    ]);
+    const ethPriceData = await getETHPrice();
 
     const ethPrice = ethPriceData.data[0]?.prices[0].value || 0;
-
-    console.log(ethPrice);
-
-    const output = {
-      totalValueInUSD,
-      totalValueInETH: (Number(totalValueInUSD) / Number(ethPrice)).toFixed(6),
-    };
 
     return {
       // tokens: validTokens,
@@ -164,6 +153,15 @@ export const getTotalWalletBalance = async (
     console.log(`We probably been rate limited, ${e}`);
     throw e;
   }
+};
+
+const getETHPrice = async () => {
+  return await alchemy.prices.getTokenPriceByAddress([
+    {
+      network: Network.BASE_MAINNET,
+      address: "0x4200000000000000000000000000000000000006", // WETH on Base
+    },
+  ]);
 };
 
 export const getAlchemyTransfers = async (
@@ -178,7 +176,6 @@ export const getAlchemyTransfers = async (
       category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.EXTERNAL],
       withMetadata: true,
       order: SortingOrder.DESCENDING,
-      maxCount: 10,
     };
 
     if (pageKey) {
@@ -208,6 +205,85 @@ export const getAlchemyTransfers = async (
     console.log("Error fetching asset transfers:", error);
     throw error;
   }
+};
+
+export const getSumOfTransfers = async (
+  assets?: AssetTransfersWithMetadataResult[],
+) => {
+  if (!assets || assets.length === 0) {
+    return { totalUSD: 0, totalETH: "0" };
+  }
+
+  const assetsBySymbol: Record<string, { amounts: number[]; symbol: string }> =
+    {};
+
+  for (const asset of assets) {
+    if (!asset.asset) return;
+
+    const symbol = asset.asset.toUpperCase();
+    const amount = asset.value;
+    if (!assetsBySymbol[symbol]) {
+      assetsBySymbol[symbol] = { amounts: [], symbol };
+    }
+
+    if (amount) {
+      assetsBySymbol[symbol].amounts.push(Number(amount));
+    }
+  }
+
+  // get pricing data
+  const listOfSymbols = Object.keys(assetsBySymbol);
+  const tokenPrices: Record<string, number> = {};
+
+  try {
+    const prices = await alchemy.prices.getTokenPriceBySymbol(listOfSymbols);
+
+    for (const price of prices.data) {
+      if (price?.symbol && price.prices && price.prices[0]) {
+        tokenPrices[price.symbol] = Number(price.prices[0].value);
+      }
+    }
+  } catch (e) {
+    console.error("Error fetching token prices:", e);
+  }
+
+  const ethPriceData = await getETHPrice();
+
+  const ethPrice = ethPriceData.data[0]?.prices[0].value || 0;
+
+  let totalUSD = 0;
+  // const breakdown: Record<
+  //   string,
+  //   { amount: number; valueInUSD: number; valueInETH: string }
+  // > = {};
+
+  for (const [symbol, { amounts }] of Object.entries(assetsBySymbol)) {
+    const totalAmount = amounts.reduce((sum, amount) => sum + amount, 0);
+    const totalPrice = tokenPrices[symbol] || 0;
+    const valueInUSD = totalAmount * totalPrice;
+    // const valueInETH = (valueInUSD / Number(ethPrice)).toFixed(6);
+
+    // breakdown[symbol] = {
+    //   amount: totalAmount,
+    //   valueInUSD,
+    //   valueInETH,
+    // };
+
+    totalUSD += valueInUSD;
+  }
+
+  const totalETH = (totalUSD / Number(ethPrice)).toFixed(6);
+
+  console.log({
+    totalUSD,
+    totalETH,
+  });
+
+  return {
+    totalUSD,
+    totalETH,
+    // breakdown,
+  };
 };
 
 export const generateSignInNonce = (length = 32) => {

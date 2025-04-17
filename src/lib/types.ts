@@ -17,6 +17,9 @@ export type Fundraiser = {
   updatedAt: Date;
   endDate: Date;
   creator: string;
+  updates: {
+    campaignGoalReached: boolean;
+  };
 };
 
 export type FundRaisers = Fundraiser[];

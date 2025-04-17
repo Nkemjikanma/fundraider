@@ -63,5 +63,8 @@ export const fundraisers: FundRaisers = [
     updatedAt: new Date(),
     endDate: new Date(new Date().setMonth(new Date().getMonth() + 2)),
     creator: "nkemjika",
+    updates: {
+      campaignGoalReached: true,
+    },
   },
 ];

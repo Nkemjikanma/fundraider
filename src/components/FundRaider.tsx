@@ -31,6 +31,7 @@ import {
   useWriteContract,
 } from "wagmi";
 
+import { getSumOfTransfers } from "@/lib/utils";
 import { base } from "wagmi/chains";
 import { DonationSection } from "./DonationSections";
 import { useMiniApp } from "./providers/MiniAppProvider";
@@ -59,6 +60,7 @@ export default function FundRaider({ param }: { param: string }) {
     context,
     isValidFrameContext,
     walletValueData,
+    transferSummary,
   } = useMiniApp();
 
   const {
@@ -291,9 +293,18 @@ export default function FundRaider({ param }: { param: string }) {
                 </div>
               </div>
               <div className="text-md font-bold text-teal-600 mt-3">
-                {Number(walletValueData?.totalValueInETH || 0).toFixed(3)} ETH{" "}
+                {Number(
+                  fundraiser.updates.campaignGoalReached
+                    ? Number(transferSummary?.totalETH).toFixed(3)
+                    : walletValueData?.totalValueInETH || 0,
+                ).toFixed(1)}{" "}
+                ETH{" "}
                 <span className="font-semibold text-sm text-gray-600">
-                  ({Number(walletValueData?.totalValueInUSD || 0)} USDC)
+                  (
+                  {fundraiser.updates.campaignGoalReached
+                    ? transferSummary?.totalUSD.toFixed(2)
+                    : Number(walletValueData?.totalValueInUSD || 0)}{" "}
+                  USDC)
                 </span>
               </div>
               <div className="text-sm text-gray-600">
@@ -307,13 +318,20 @@ export default function FundRaider({ param }: { param: string }) {
               </div>
             </div>
 
-            {fundraiser.goal > Number(walletValueData?.totalValueInETH) ? (
-              <div className="bg-red-50 text-red-600 py-2 px-3 rounded-none text-center text-xs font-medium border border-red-100">
-                Goal not reached yet — Help make a difference!
+            {fundraiser.updates.campaignGoalReached ? (
+              <div className="bg-emerald-50 text-emerald-600 py-2 px-3 rounded-none text-center text-sm font-medium border border-emerald-100">
+                {`Goal reached! Thank you! ${
+                  transferSummary?.totalETH
+                    ? (
+                        (Number(transferSummary.totalETH) / fundraiser.goal) *
+                        100
+                      ).toFixed(1)
+                    : "100"
+                }% of goal reached`}
               </div>
             ) : (
-              <div className="bg-emerald-50 text-emerald-600 py-2 px-3 rounded-none text-center text-sm font-medium border border-emerald-100">
-                {`Goal reached! Thank you! ${Number(raised).toFixed(1)}% of goal reached`}
+              <div className="bg-red-50 text-red-600 py-2 px-3 rounded-none text-center text-xs font-medium border border-red-100">
+                Goal not reached yet — Help make a difference!
               </div>
             )}
           </div>

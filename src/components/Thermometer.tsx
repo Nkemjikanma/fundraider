@@ -17,9 +17,11 @@ export function Thermometer({ fundraiserId }: ThermometerProps) {
   const requestRef = useRef<number>(0);
   const fundraiser = fundraisers[0];
 
-  const { walletValueData } = useMiniApp();
+  const { walletValueData, transferSummary } = useMiniApp();
 
-  const raised = Number(walletValueData?.totalValueInETH || 0);
+  const raised = fundraiser.updates.campaignGoalReached
+    ? transferSummary?.totalUSD.toFixed(2)
+    : Number(walletValueData?.totalValueInETH || 0);
   const progress = (Number(raised) / fundraiser.goal) * 100;
 
   // Animation loop for flowing effect

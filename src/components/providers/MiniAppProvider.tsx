@@ -1,7 +1,8 @@
 import { appURL, fundraisers } from "@/lib/constants";
+import { useTransactions } from "@/lib/hooks/useTransactions";
 import { useWalletValue } from "@/lib/hooks/useWalletValue";
 import type { WalletBalanceSummary } from "@/lib/types";
-import { generateSignInNonce } from "@/lib/utils";
+import { generateSignInNonce, getSumOfTransfers } from "@/lib/utils";
 import sdk, {
   AddFrame,
   type Context,
@@ -30,6 +31,12 @@ export type MiniAppContextType = {
   lastEvent: string;
   handleShare: (raised?: string, shareMessage?: string) => void;
   walletValueData: WalletBalanceSummary | undefined;
+  transferSummary:
+    | {
+        totalUSD: number;
+        totalETH: string;
+      }
+    | undefined;
 };
 
 const MiniAppContext = createContext<MiniAppContextType | undefined>(undefined);
@@ -50,6 +57,13 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
   const [isValidFrameContext, setIsValidFrameContext] =
     useState<MiniAppContextType["isValidFrameContext"]>(null);
   const [lastEvent, setLastEvent] = useState("");
+  const [transferSummary, setTransferSummary] = useState<
+    | {
+        totalUSD: number;
+        totalETH: string;
+      }
+    | undefined
+  >();
 
   const { data: walletValueData } = useWalletValue(
     fundraiser.fundraiserAddress.address,
@@ -67,7 +81,21 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
     return signInNonce;
   }, []);
 
+  const { data } = useTransactions(fundraiser.fundraiserAddress.address);
+
   useEffect(() => {
+    async function calculateTransferSum() {
+      if (data?.transfers.transfers) {
+        try {
+          const summary = await getSumOfTransfers(data.transfers.transfers);
+          console.log("sum", summary);
+          setTransferSummary(summary);
+        } catch (error) {
+          console.error("Error calculating transfer sum:", error);
+        }
+      }
+    }
+    calculateTransferSum();
     const load = async () => {
       try {
         const context = await sdk.context;
@@ -132,6 +160,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       console.log("Calling load");
       setIsLoaded(true);
       load();
+
       return () => {
         sdk.removeAllListeners();
       };
@@ -214,6 +243,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       addMiniApp,
       handleShare,
       walletValueData,
+      transferSummary,
     }),
     [
       context,
@@ -227,6 +257,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       addMiniApp,
       handleShare,
       walletValueData,
+      transferSummary,
     ],
   );
 
